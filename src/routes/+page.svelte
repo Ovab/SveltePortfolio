@@ -1,5 +1,5 @@
 <script>
-    import NavRight from "../components/NavRight.svelte";
+    import NavRight from "../components/NavArrow.svelte";
 </script>
 
 <div class="h-full w-full flex flex-row">
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <NavRight message="projects" url="/projects"/>
+    <NavRight message="projects" url="/projects" arrowRight="true"/>
 </div>
 
 
