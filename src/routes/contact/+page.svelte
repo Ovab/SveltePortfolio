@@ -15,13 +15,13 @@
 <div class="flex flex-row">
     <NavArrow message="Projects" url="/projects"/>
     <div class="flex place-self-center justify-center w-full">
-        <div class="flex flex-col bg-gray-300 h-[222px] w-[30vw] rounded p-3 gap-2">
-            <input type="text" class="bg-gray-100 rounded w-full p-0.5" placeholder="Naam" id="naam">
-            <input type="email" class="bg-gray-100 rounded w-full p-0.5" placeholder="E-mail" id="email">
+        <div class="flex flex-col bg-gray-300 min-h-[222px] h-fit w-[30vw] rounded p-3 gap-2">
+            <input type="text" class="bg-gray-100 rounded w-full p-0.5 pl-2" placeholder="Naam" id="naam">
+            <input type="email" class="bg-gray-100 rounded w-full p-0.5 pl-2" placeholder="E-mail" id="email">
             <TextArea bind:value={val}
                     minRows={4}
                     maxRows={20}/>
-            <button on:click={submit} type="submit" class="border text-center bg-gray-100" value="Verstuur">Verstuur</button>
+            <button on:click={submit} type="submit" class="border text-center bg-gray-100" value="Verstuur" aria-roledescription="click to send">Verstuur</button>
         </div>
 
 

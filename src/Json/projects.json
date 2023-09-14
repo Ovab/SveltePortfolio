@@ -1,0 +1,187 @@
+{
+    "tags": {
+        "nuxt": {
+            "name": "Nuxt",
+            "color": "#00dc82"
+        },
+        "tailwind": {
+            "name": "Tailwind",
+            "color": "#38bdf8"
+        },
+        "svelte": {
+            "name": "Svelte",
+            "color": "#ff0080"
+        },
+        "laravel": {
+            "name": "Laravel",
+            "color": "#ff2e63"
+        }
+    },
+    "werk": {
+        "JaspersMedia": {
+            "name": "Jaspers Media",
+            "from": "2020-09-01",
+            "to": "2021-01-01",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "Na mijn stage heb ik een baan aangeboden om hier part time door te kunnen werken <br> Ik hier aan de websites <a href='https://luier.nl'>Luier.nl</a> en <a href='https://flap.nl'>Flap.nl</a>",
+            "img": "/assets/logo-jm.png",
+            "gitUrl": "",
+            "webUrl": "https://jaspersmedia.nl",
+            "tags": [
+                "nuxt",
+                "tailwind",
+                "laravel"
+            ]
+        },
+        "job2": {
+            "name": "Job 2",
+            "from": "2020-09-01",
+            "to": "2022-01-01",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "",
+            "webUrl": "",
+            "tags": [
+                "nuxt",
+                "tailwind",
+                "svelte"
+            ]
+        }
+    },
+    "projecten": {
+        "sampleProject": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },"sampleProject1": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },"sampleProject2": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },"sampleProject3": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },"sampleProject4": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },"sampleProject5": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },"sampleProject6": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },"sampleProject7": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },"sampleProject8": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },"sampleProject9": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },"sampleProject10": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        }
+    }
+}

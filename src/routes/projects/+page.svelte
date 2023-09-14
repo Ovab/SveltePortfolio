@@ -1,6 +1,7 @@
 <script>
     import ProjectBlock from "../../components/ProjectBlock.svelte";
     import NavArrow from "../../components/NavArrow.svelte";
+    import ProjectsJson from "../../Json/Projects.json";
 
     export const tags = [
         {
@@ -30,19 +31,37 @@
         <h1 class="text-3xl">
             Projecten
         </h1>
-
         <h2 class="text-2xl text-center">Werk</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 grid-rows-1 mt-3 gap-2">
-            <ProjectBlock name="Jaspers Media" korteBeschrijving="sample text" tags="{tags}" img="/assets/logo-jm.png"
-                          url="/projects"/>
-            <ProjectBlock korteBeschrijving="yeyeyey" tags="{tags}" img="/assets/test.jpg" url="/projects"/>
-            <ProjectBlock korteBeschrijving="yeyeyey" tags="{tags}" img="/assets/test.jpg" url="/projects"/>
+            {#each Object.values(ProjectsJson.werk) as project (project.name)}
+                <ProjectBlock
+                    name={project.name}
+                    from="{project.from}"
+                    to="{project.to}"
+                    korteBeschrijving={project.korteBeschrijving}
+                    langeBeschrijving={project.langeBeschrijving}
+                    tags={project.tags}
+                    img={project.img}
+                    webUrl={project.webUrl}
+                    gitUrl={project.gitUrl}
+                />
+            {/each}
         </div>
         <h2 class="text-2xl text-center">Projecten</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 grid-rows-1 mt-3 gap-2">
-            <ProjectBlock korteBeschrijving="yeyeyey" tags="{tags}" img="/assets/test.jpg" url="/projects"/>
-            <ProjectBlock korteBeschrijving="yeyeyey" tags="{tags}" img="/assets/test.jpg" url="/projects"/>
-            <ProjectBlock korteBeschrijving="yeyeyey" tags="{tags}" img="/assets/test.jpg" url="/projects"/>
+            {#each Object.values(ProjectsJson.projecten) as project (project.name)}
+                <ProjectBlock
+                    name={project.name}
+                    from="{project.from}"
+                    to="{project.to}"
+                    korteBeschrijving={project.korteBeschrijving}
+                    langeBeschrijving={project.langeBeschrijving}
+                    tags={project.tags}
+                    img={project.img}
+                    webUrl={project.webUrl}
+                    gitUrl={project.gitUrl}
+                />
+            {/each}
         </div>
     </div>
     <NavArrow message="Contact" url="/contact" arrowRight="true"/>
