@@ -7,8 +7,23 @@ const port = 3000
 
 app.use(bodyParser.json());
 
+// make sure all env variables are set to avoid errors when trying to send an email
+let exit = false;
+if(process.env.MAIL_USER === undefined || process.env.MAIL_USER === "") {
+    console.log("MAIL_USER not set, exiting...")
+    exit = true;
+}
+if(process.env.MAIL_PASS === undefined || process.env.MAIL_PASS === "") {
+    console.log("MAIL_PASS not set, exiting...")
+    exit = true;
+}
+if(exit) {
+    process.exit(1)
+}
+
+
+
 app.post('/sendContactMail', (req, res) => {
-        console.log("send mail: ", process.env.MAIL_PASSWORD);
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {

@@ -11,6 +11,8 @@ npm run dev -- --open
 
 And then start it for expressJS if you want the mailer to work:
 
+Enter your email credentials in the .env file (see example .env), if you're using gmail it's advised to use an [app password](https://support.google.com/accounts/answer/185833?hl=en) instead of your normal password.
+
 ```bash
 node app.cjs
 ```
