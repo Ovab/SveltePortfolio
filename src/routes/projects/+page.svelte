@@ -2,27 +2,6 @@
     import ProjectBlock from "../../components/ProjectBlock.svelte";
     import NavArrow from "../../components/NavArrow.svelte";
     import ProjectsJson from "../../Json/Projects.json";
-
-    export const tags = [
-        {
-            "name": "Nuxt",
-            "color": '#00dc82'
-        },
-        {
-            "name": "Tailwind",
-            "color": '#38bdf8'
-
-        },
-        {
-            "name": "Svelte",
-            "color": '#ff0080'
-
-        },
-        {
-            "name": "Laravel",
-            "color": "#ff2e63"
-        }
-    ]
 </script>
 
 <div class="h-full w-full flex flex-row">
@@ -32,8 +11,8 @@
             Projecten
         </h1>
         <h2 class="text-2xl text-center">Werk</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 grid-rows-1 mt-3 gap-2">
-            {#each Object.values(ProjectsJson.werk) as project (project.name)}
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 grid-rows-1 mt-3 gap-2">
+            {#each Object.values(ProjectsJson.werk) as project}
                 <ProjectBlock
                     name={project.name}
                     from="{project.from}"
@@ -48,8 +27,8 @@
             {/each}
         </div>
         <h2 class="text-2xl text-center">Projecten</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 grid-rows-1 mt-3 gap-2">
-            {#each Object.values(ProjectsJson.projecten) as project (project.name)}
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 grid-rows-1 mt-3 gap-2">
+            {#each Object.values(ProjectsJson.projecten) as project}
                 <ProjectBlock
                     name={project.name}
                     from="{project.from}"

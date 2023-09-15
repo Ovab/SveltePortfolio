@@ -1,33 +1,55 @@
 <script>
     import TextArea from "../../components/TextAreaAutoResize.svelte";
     import NavArrow from "../../components/NavArrow.svelte";
-    let val = "";
+    import { ofetch } from "ofetch";
 
-    function submit() {
-        const email = document.getElementById('email').value;
-        const naam = document.getElementById('naam').value;
-        const bericht = document.getElementById('bericht').value;
+    let naam = "";
+    let email = "";
+    let bericht = "";
 
-        console.log(email, naam, bericht);
+    async function submit() {
+        const res = await ofetch('http://localhost:3000/sendContactMail', {
+            method: 'POST',
+            body: {
+                naam:naam,
+                email: email,
+                bericht: bericht
+            }
+        }).catch((err) => {
+            err.data; alert('Er is iets misgegaan, stuur aub handmatig een email met de gegevens hier naast')
+        });
+
+        if(res==='success') {
+            alert('Het bericht is verstuurd')
+        }
     }
 </script>
 
 <div class="flex flex-row">
     <NavArrow message="Projects" url="/projects"/>
-    <div class="flex place-self-center justify-center w-full">
-        <div class="flex flex-col bg-gray-300 min-h-[222px] h-fit w-[30vw] rounded p-3 gap-2">
-            <input type="text" class="bg-gray-100 rounded w-full p-0.5 pl-2" placeholder="Naam" id="naam">
-            <input type="email" class="bg-gray-100 rounded w-full p-0.5 pl-2" placeholder="E-mail" id="email">
-            <TextArea bind:value={val}
+    <div class="flex flex-col md:flex-row
+                md:place-self-center justify-center
+                gap-2 w-full">
+
+        <div class="flex flex-col
+                    bg-gray-300 min-h-[222px]
+                    md:w-[30vw] rounded-lg
+                    p-3 gap-2">
+            <span class="font-semibold text-xl text-center">Dit stuurt mij een email.</span>
+            <input bind:value={naam} type="text" class="bg-gray-100 rounded w-full p-0.5 pl-2" placeholder="Naam">
+            <input bind:value={email} type="email" class="bg-gray-100 rounded w-full p-0.5 pl-2" placeholder="E-mail">
+            <TextArea bind:value={bericht}
                     minRows={4}
                     maxRows={20}/>
             <button on:click={submit} type="submit" class="border text-center bg-gray-100" value="Verstuur" aria-roledescription="click to send">Verstuur</button>
         </div>
 
 
-        <div class=" ml-10 flex flex-col bg-gray-300 h-[222px] w-[30vw] rounded p-3 gap-2">
-            <p>
-                Werkt die niet of wil je gewoon een mailtje sturen?
+        <div class="flex flex-col gap-2
+                    md:w-[30vw]
+                    bg-gray-300 rounded-lg p-3">
+            <p class="font-semibold text-md text-center">
+                Werkt die niet of wil je gewoon een mailtje sturen op de normale manier?
             </p>
 
             <p class="mt-auto"> Dat kan naar <a class="w-fit text-blue-400 underline" href="mailto:bavo.knol@student.hu.nl">bavo.knol@student.hu.nl</a><br>

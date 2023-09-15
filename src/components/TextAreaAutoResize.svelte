@@ -14,7 +14,7 @@
             class="rounded"
     >{value + '\n'}</pre>
 
-    <textarea bind:value class="bg-gray-100 rounded p-0.5" id="bericht" placeholder="Bericht"></textarea>
+    <textarea bind:value class="bg-gray-100 rounded p-0.5" placeholder="Bericht"></textarea>
 </div>
 
 <style>

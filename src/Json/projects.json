@@ -47,6 +47,21 @@
                 "tailwind",
                 "svelte"
             ]
+        },
+        "job3": {
+            "name": "Job 3",
+            "from": "2020-09-01",
+            "to": "2022-01-01",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "",
+            "webUrl": "",
+            "tags": [
+                "nuxt",
+                "tailwind",
+                "svelte"
+            ]
         }
     },
     "projecten": {
@@ -62,7 +77,8 @@
                 "tailwind",
                 "laravel"
             ]
-        },"sampleProject1": {
+        },
+        "sampleProject1": {
             "name": "Sample Project",
             "korteBeschrijving": "sample text",
             "langeBeschrijving": "sample text",
@@ -74,7 +90,8 @@
                 "tailwind",
                 "laravel"
             ]
-        },"sampleProject2": {
+        },
+        "sampleProject2": {
             "name": "Sample Project",
             "korteBeschrijving": "sample text",
             "langeBeschrijving": "sample text",
@@ -86,7 +103,8 @@
                 "tailwind",
                 "laravel"
             ]
-        },"sampleProject3": {
+        },
+        "sampleProject3": {
             "name": "Sample Project",
             "korteBeschrijving": "sample text",
             "langeBeschrijving": "sample text",
@@ -98,7 +116,8 @@
                 "tailwind",
                 "laravel"
             ]
-        },"sampleProject4": {
+        },
+        "sampleProject4": {
             "name": "Sample Project",
             "korteBeschrijving": "sample text",
             "langeBeschrijving": "sample text",
@@ -110,67 +129,8 @@
                 "tailwind",
                 "laravel"
             ]
-        },"sampleProject5": {
-            "name": "Sample Project",
-            "korteBeschrijving": "sample text",
-            "langeBeschrijving": "sample text",
-            "img": "assets/test.jpg",
-            "gitUrl": "Ovab/BkChess",
-            "webUrl": "https://chess.bavoknol.nl",
-            "tags": [
-                "svelte",
-                "tailwind",
-                "laravel"
-            ]
-        },"sampleProject6": {
-            "name": "Sample Project",
-            "korteBeschrijving": "sample text",
-            "langeBeschrijving": "sample text",
-            "img": "assets/test.jpg",
-            "gitUrl": "Ovab/BkChess",
-            "webUrl": "https://chess.bavoknol.nl",
-            "tags": [
-                "svelte",
-                "tailwind",
-                "laravel"
-            ]
-        },"sampleProject7": {
-            "name": "Sample Project",
-            "korteBeschrijving": "sample text",
-            "langeBeschrijving": "sample text",
-            "img": "assets/test.jpg",
-            "gitUrl": "Ovab/BkChess",
-            "webUrl": "https://chess.bavoknol.nl",
-            "tags": [
-                "svelte",
-                "tailwind",
-                "laravel"
-            ]
-        },"sampleProject8": {
-            "name": "Sample Project",
-            "korteBeschrijving": "sample text",
-            "langeBeschrijving": "sample text",
-            "img": "assets/test.jpg",
-            "gitUrl": "Ovab/BkChess",
-            "webUrl": "https://chess.bavoknol.nl",
-            "tags": [
-                "svelte",
-                "tailwind",
-                "laravel"
-            ]
-        },"sampleProject9": {
-            "name": "Sample Project",
-            "korteBeschrijving": "sample text",
-            "langeBeschrijving": "sample text",
-            "img": "assets/test.jpg",
-            "gitUrl": "Ovab/BkChess",
-            "webUrl": "https://chess.bavoknol.nl",
-            "tags": [
-                "svelte",
-                "tailwind",
-                "laravel"
-            ]
-        },"sampleProject10": {
+        },
+        "sampleProject5": {
             "name": "Sample Project",
             "korteBeschrijving": "sample text",
             "langeBeschrijving": "sample text",

@@ -1,11 +1,13 @@
 const express = require('express')
 const bodyParser = require('body-parser');
+const cors = require('cors');
 require('dotenv').config()
 const nodemailer = require('nodemailer');
 const app = express()
 const port = 3000
 
 app.use(bodyParser.json());
+app.use(cors());
 
 // make sure all env variables are set to avoid errors when trying to send an email
 let exit = false;

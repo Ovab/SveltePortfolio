@@ -27,12 +27,12 @@
     }
 </script>
 
-<div class="group cursor-pointer" on:click={openMoreHandler} aria-roledescription="click to see more">
-    <div class="h-[250px] rounded bg-gray-500 group-hover:scale-105 transition-all">
+<div class="group cursor-pointer" on:click={openMoreHandler} on:keydown={openMoreHandler} aria-roledescription="click to see more">
+    <div class="h-[250px] md:h-[250px] rounded bg-gray-500 group-hover:scale-105 transition-all">
         <div class="flex justify-center overflow-hidden">
             <img class="rounded object-cover h-[250px] group-hover:scale-110 transition-all" src="{img}" alt="yYEET">
         </div>
-        <div class="relative -translate-y-[70px] bg-gray-800/70 h-[70px] rounded grid grid-cols-2">
+        <div class="relative -translate-y-[100px] xl:-translate-y-[70px] bg-gray-800/70 h-[100px] xl:h-[70px] rounded grid grid-cols-2">
             <div>
                 <p class="text-white ml-2 font-semibold">{name}</p>
                 <Tags tags="{tags}"/>
@@ -45,8 +45,8 @@
 
 {#if openMore}
     <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 h-screen w-screen bg-black/40"
-         id="outerDiv" on:click={closeMoreHandler} aria-roledescription="click to see less">
-        <div class="bg-white h-fit w-[60vw] rounded flex p-2 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" id="innerDiv">
+         id="outerDiv" on:click={closeMoreHandler} on:keydown={closeMoreHandler} aria-roledescription="click to see less">
+        <div class="bg-white h-fit w-[90vw] md:w-[80vw] rounded flex p-2 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" id="innerDiv">
             <div class="grid grid-cols-2 gap-2">
                 <div>
                     <img class="rounded object-scale-down group-hover:scale-110 transition-all bg-gray-500 mb-10"
