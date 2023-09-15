@@ -6,7 +6,6 @@ const app = express()
 const port = 3000
 
 app.use(bodyParser.json());
-console.log(process.env)
 
 app.post('/sendContactMail', (req, res) => {
         console.log("send mail: ", process.env.MAIL_PASSWORD);
@@ -14,7 +13,7 @@ app.post('/sendContactMail', (req, res) => {
             service: 'gmail',
             auth: {
                 user: process.env.MAIL_USER,
-                pass: process.env.MAIL_PASSWORD
+                pass: process.env.MAIL_PASS
             }
         });
 
