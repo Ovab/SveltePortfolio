@@ -25,6 +25,11 @@
     }
 </script>
 
+<svelte:head>
+    <title>Contact</title>
+    <meta name="description" content="Dit is de contact pagina, zeer epik" />
+</svelte:head>
+
 <div class="flex flex-row">
     <NavArrow message="Projects" url="/projects"/>
     <div class="flex flex-col md:flex-row

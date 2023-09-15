@@ -4,6 +4,11 @@
     import ProjectsJson from "../../Json/Projects.json";
 </script>
 
+<svelte:head>
+    <title>Projecten</title>
+    <meta name="description" content="Dit is de projecten pagina, zeer epik" />
+</svelte:head>
+
 <div class="h-full w-full flex flex-row">
     <NavArrow message="Home" url="/"/>
     <div class="flex flex-col w-full mx-2">
