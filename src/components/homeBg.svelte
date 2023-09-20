@@ -4,6 +4,20 @@
     import studio from '@theatre/studio'
     import {getProject, types} from '@theatre/core'
 
+    function rgbToHex(r, g, b) {
+        const toHex = (value) => {
+            const hex = Math.round(value * 255).toString(16);
+            return hex.length === 1 ? "0" + hex : hex;
+        };
+
+        const redHex = toHex(r);
+        const greenHex = toHex(g);
+        const blueHex = toHex(b);
+
+        return `#${redHex}${greenHex}${blueHex}`;
+    }
+
+
     if(browser) {
         studio.initialize()
 
@@ -11,59 +25,68 @@
 
         const sheet = project.sheet('Animated scene')
 
-        const camera =  new THREE.PerspectiveCamera(
-            70,
-            window.innerWidth / window.innerHeight,
-            10,
-            200,
-        )
 
-        camera.position.z = 100
-
-        // Scene
-        const scene = new THREE.Scene()
-
-        // TorusKnot
-        const geometry = new THREE.TorusKnotGeometry(10, 3, 300, 16)
-        const material = new THREE.MeshStandardMaterial({color: '#f00'})
-        material.color = new THREE.Color('#049ef4')
-        material.roughness = 0.5
-
-        const mesh = new THREE.Mesh(geometry, material)
-        mesh.castShadow = true
-        mesh.receiveShadow = true
-        scene.add(mesh)
-
-        const geometryCone = new THREE.ConeGeometry( 5, 20, 32 );
-        const materialCone = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-        const cone = new THREE.Mesh(geometryCone, materialCone );
-        scene.add( cone );
-        // cone.position.set(6, 8, 70)
-
-        // Create a Theatre.js object with the props you want to animate
-        const coneObj = sheet.object('Cone', {
-            // Note that the rotation is in radians
-            // (full rotation: 2 * Math.PI)
-            rotation: types.compound({
-                x: types.number(cone.rotation.x, { range: [-2, 2] }),
-                y: types.number(cone.rotation.y, { range: [-2, 2] }),
-                z: types.number(cone.rotation.z, { range: [-2, 2] }),
+        const camera =  new THREE.PerspectiveCamera()
+        camera.aspect = window.innerWidth / window.innerHeight
+        const cameraObj = sheet.object("camera",{
+            controls: types.compound({
+                fov: types.number(70, { range: [10, 200] }),
+                near: types.number(10, { range: [0, 100] }),
+                far: types.number(200, { range: [0, 1000] }),
             }),
 
             position: types.compound({
                 x: types.number(0, { nudgeMultiplier: 0.1 }),
                 y: types.number(0, { nudgeMultiplier: 0.1 }),
                 z: types.number(0, { nudgeMultiplier: 0.1 })
+            }),
+
+            rotation: types.compound({
+                xR: types.number(0, { range: [-2, 2] }),
+                yR: types.number(0, { range: [-2, 2] }),
+                zR: types.number(0, { range: [-2, 2] })
             })
+
+        })
+        cameraObj.onValuesChange((values) => {
+            const {x, y, z} = values.position
+            const {xR, yR, zR} = values.rotation
+            camera.position.set(x,y,z)
+            camera.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
+
+            const {fov, aspect, near, far} = values.controls
+            camera.fov = fov
+            camera.near = near
+            camera.far = far
+            camera.updateProjectionMatrix()
         })
 
-        coneObj.onValuesChange((values) => {
-            const {xPos, yPos, zPos} = values.position
-            const { x, y, z } = values.rotation
+        // Scene
+        const scene = new THREE.Scene()
 
-            cone.position.set(xPos,yPos,zPos)
-            cone.rotation.set(x * Math.PI, y * Math.PI, z * Math.PI)
+        // TorusKnot
+        const geometryKnot = new THREE.TorusKnotGeometry(10, 3, 300, 16)
+        const materialKnot = new THREE.MeshStandardMaterial({
+            color: '#049ef4',
+            metalness: 0.3,
+            roughness: 0.5,
         })
+        const mesh = new THREE.Mesh(geometryKnot, materialKnot)
+        mesh.castShadow = true
+        mesh.receiveShadow = true
+        scene.add(mesh)
+
+        // Cone
+        const geometryCone = new THREE.ConeGeometry( 5, 20, 32 );
+        const materialCone = new THREE.MeshStandardMaterial({
+            color: 0xffff00,
+            metalness: 0.3,
+            roughness: 0.99,
+        });
+        const cone = new THREE.Mesh(geometryCone, materialCone);
+        cone.castShadow = true
+        cone.receiveShadow = true
+        scene.add(cone);
 
 
         // Create a Theatre.js object with the props you want to animate
@@ -76,24 +99,68 @@
                 z: types.number(mesh.rotation.z, { range: [-2, 2] }),
             }),
         })
+        const coneObj = sheet.object('Cone', {
+            rotation: types.compound({
+                xR: types.number(cone.rotation.x, { range: [-2, 2] }),
+                yR: types.number(cone.rotation.y, { range: [-2, 2] }),
+                zR: types.number(cone.rotation.z, { range: [-2, 2] }),
+            }),
+
+            position: types.compound({
+                xP: types.number(0, { nudgeMultiplier: 0.1 }),
+                yP: types.number(0, { nudgeMultiplier: 0.1 }),
+                zP: types.number(0, { nudgeMultiplier: 0.1 })
+            })
+        })
 
 
+        // Apply changes to the object when the values change
         torusKnotObj.onValuesChange((values) => {
             const { x, y, z } = values.rotation
 
             mesh.rotation.set(x * Math.PI, y * Math.PI, z * Math.PI)
         })
+        coneObj.onValuesChange((values) => {
+            const {xP, yP, zP} = values.position
+            cone.position.set(xP,yP,zP)
+
+
+            const { xR, yR, zR } = values.rotation
+            cone.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
+        })
+
+
+
+        /*
+        * Fog
+        */
+
+        const fog = new THREE.Fog('#1f30b2', 1, 15)
+        const fogObj=sheet.object('Fog', {
+            color: types.rgba(),
+            near: 0,
+            far: 100,
+        })
+
+        fogObj.onValuesChange((values) => {
+            const {color, near, far} = values
+            fog.color.set(rgbToHex(color.r, color.g, color.b))
+            fog.near = near
+            fog.far = far
+            scene.fog = fog
+        })
+
+        scene.fog = fog
 
         /*
          * Lights
          */
-
         // Ambient Light
         const ambientLight = new THREE.AmbientLight('#ffffff', 0.5)
         scene.add(ambientLight)
 
         // Point light
-        const directionalLight = new THREE.DirectionalLight('#ff0000', 30 /* , 0, 1 */)
+        const directionalLight = new THREE.DirectionalLight('#ffffff', 10 /* , 0, 1 */)
         directionalLight.position.y = 20
         directionalLight.position.z = 20
 
@@ -108,17 +175,54 @@
         directionalLight.shadow.camera.bottom = -20
         directionalLight.shadow.camera.left = -20
 
+        const directionalLightObj = sheet.object('Directional Light', {
+            color: types.rgba(),
+            intensity: types.number(1, { range: [0, 10] }),
+            position: types.compound({
+                x: types.number(directionalLight.position.x, { nudgeMultiplier: 0.1 }),
+                y: types.number(directionalLight.position.y, { nudgeMultiplier: 0.1 }),
+                z: types.number(directionalLight.position.z, { nudgeMultiplier: 0.1 })
+            }),
+        })
+
+        directionalLightObj.onValuesChange((values) => {
+            const { x, y, z } = values.position
+            directionalLight.position.set(x, y, z)
+
+            directionalLight.color.set(rgbToHex(values.color.r, values.color.g, values.color.b))
+            directionalLight.intensity = values.intensity
+        })
+
         scene.add(directionalLight)
 
         // RectAreaLight
         const rectAreaLight = new THREE.RectAreaLight('#ff0', 1, 50, 50)
 
-        rectAreaLight.position.z = 10
-        rectAreaLight.position.y = -40
-        rectAreaLight.position.x = -20
-        rectAreaLight.lookAt(new THREE.Vector3(0, 0, 0))
+        const rectAreaLightObj = sheet.object('Rect Area Light', {
+            color: types.rgba(),
+            intensity: types.number(1, { range: [0, 10] }),
+            position: types.compound({
+                x: types.number(rectAreaLight.position.x, { nudgeMultiplier: 0.1 }),
+                y: types.number(rectAreaLight.position.y, { nudgeMultiplier: 0.1 }),
+                z: types.number(rectAreaLight.position.z, { nudgeMultiplier: 0.1 })
+            }),
+        })
+
+        rectAreaLightObj.onValuesChange((values) => {
+            const { x, y, z } = values.position
+            rectAreaLight.position.set(x, y, z)
+
+            rectAreaLight.color.set(rgbToHex(values.color.r, values.color.g, values.color.b))
+            rectAreaLight.intensity = values.intensity
+        })
 
         scene.add(rectAreaLight)
+
+        // const background= new THREE.
+
+        const bg = sheet.object('Background', {
+            color: types.rgba(),
+        })
 
         // Renderer
         const renderer = new THREE.WebGLRenderer({antialias: true})
