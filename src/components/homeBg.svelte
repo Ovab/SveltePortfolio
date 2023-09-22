@@ -68,14 +68,6 @@
         const loader = new GLTFLoader();
         loader.load('src/3d/projectRoom.glb', function (gltf) {
 
-            gltf.scene.traverse(function (child) {
-                if ((child as THREE.Mesh).isMesh) {
-                    const m = child as THREE.Mesh;
-                    m.castShadow = true;
-                    m.receiveShadow = true;
-                }
-            })
-
             const gltfObj = sheet.object('model', {
                 rotation: types.compound({
                     xR: types.number(gltf.scene.rotation.x, {range: [-2, 2]}),
@@ -164,27 +156,6 @@
                     cone.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
                 })*/
 
-
-        /*
-        * Fog
-        */
-
-        const fog = new THREE.Fog('#1f30b2', 1, 15)
-        const fogObj = sheet.object('Fog', {
-            color: types.rgba(),
-            near: 0,
-            far: 100,
-        })
-
-        fogObj.onValuesChange((values) => {
-            const {color, near, far} = values
-            fog.color.set(rgbToHex(color.r, color.g, color.b))
-            fog.near = near
-            fog.far = far
-            scene.fog = fog
-        })
-
-        scene.fog = fog
 
         /*
          * Lights
