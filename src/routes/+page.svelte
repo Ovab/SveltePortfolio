@@ -8,8 +8,8 @@
     <meta name="description" content="Bavo's personal website">
 </svelte:head>
 
-<!--<div class="fixed z-10 h-full w-full flex flex-row">
-    <div class="flex flex-col justify-center items-center h-screen w-full">
+<div class="fixed z-10 h-full w-full flex flex-row">
+<!--    <div class="flex flex-col justify-center items-center h-screen w-full">
         <h1>Heya 👋, it is I Bavo</h1>
         <div class="flex flex-row gap-2 bg-white">
             <div>Ik ben een:</div>
@@ -22,10 +22,10 @@
                 <li class="opacity-10">Idk what to put here</li>
             </ul>
         </div>
-    </div>
+    </div>-->
 
     <NavRight message="projects" url="/projects" arrowRight="true"/>
-</div>-->
+</div>
 
 
     <HomeBg />

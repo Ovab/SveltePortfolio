@@ -1,8 +1,10 @@
 <script lang="ts">
-    import { browser } from '$app/environment';
+    import {browser} from '$app/environment';
     import * as THREE from "three";
     import studio from '@theatre/studio'
     import {getProject, types} from '@theatre/core'
+
+    import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
     function rgbToHex(r, g, b) {
         const toHex = (value) => {
@@ -18,7 +20,7 @@
     }
 
 
-    if(browser) {
+    if (browser) {
         studio.initialize()
 
         const project = getProject('THREE.js x Theatre.js')
@@ -26,32 +28,31 @@
         const sheet = project.sheet('Animated scene')
 
 
-        const camera =  new THREE.PerspectiveCamera()
+        const camera = new THREE.PerspectiveCamera()
         camera.aspect = window.innerWidth / window.innerHeight
-        const cameraObj = sheet.object("camera",{
+        const cameraObj = sheet.object("camera", {
             controls: types.compound({
-                fov: types.number(70, { range: [10, 200] }),
-                near: types.number(10, { range: [0, 100] }),
-                far: types.number(200, { range: [0, 1000] }),
+                fov: types.number(70, {range: [10, 200]}),
+                near: types.number(10, {range: [0, 100]}),
+                far: types.number(200, {range: [0, 1000]}),
             }),
 
             position: types.compound({
-                x: types.number(0, { nudgeMultiplier: 0.1 }),
-                y: types.number(0, { nudgeMultiplier: 0.1 }),
-                z: types.number(0, { nudgeMultiplier: 0.1 })
+                x: types.number(0, {nudgeMultiplier: 0.1}),
+                y: types.number(0, {nudgeMultiplier: 0.1}),
+                z: types.number(0, {nudgeMultiplier: 0.1})
             }),
 
             rotation: types.compound({
-                xR: types.number(0, { range: [-2, 2] }),
-                yR: types.number(0, { range: [-2, 2] }),
-                zR: types.number(0, { range: [-2, 2] })
+                xR: types.number(0, {range: [-2, 2]}),
+                yR: types.number(0, {range: [-2, 2]}),
+                zR: types.number(0, {range: [-2, 2]})
             })
-
         })
         cameraObj.onValuesChange((values) => {
             const {x, y, z} = values.position
             const {xR, yR, zR} = values.rotation
-            camera.position.set(x,y,z)
+            camera.position.set(x, y, z)
             camera.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
 
             const {fov, aspect, near, far} = values.controls
@@ -64,71 +65,104 @@
         // Scene
         const scene = new THREE.Scene()
 
-        // TorusKnot
-        const geometryKnot = new THREE.TorusKnotGeometry(10, 3, 300, 16)
-        const materialKnot = new THREE.MeshStandardMaterial({
-            color: '#049ef4',
-            metalness: 0.3,
-            roughness: 0.5,
-        })
-        const mesh = new THREE.Mesh(geometryKnot, materialKnot)
-        mesh.castShadow = true
-        mesh.receiveShadow = true
-        scene.add(mesh)
+        const loader = new GLTFLoader();
+        loader.load('src/3d/projectRoom.glb', function (gltf) {
 
-        // Cone
-        const geometryCone = new THREE.ConeGeometry( 5, 20, 32 );
-        const materialCone = new THREE.MeshStandardMaterial({
-            color: 0xffff00,
-            metalness: 0.3,
-            roughness: 0.99,
-        });
-        const cone = new THREE.Mesh(geometryCone, materialCone);
-        cone.castShadow = true
-        cone.receiveShadow = true
-        scene.add(cone);
-
-
-        // Create a Theatre.js object with the props you want to animate
-        const torusKnotObj = sheet.object('Torus Knot', {
-            // Note that the rotation is in radians
-            // (full rotation: 2 * Math.PI)
-            rotation: types.compound({
-                x: types.number(mesh.rotation.x, { range: [-2, 2] }),
-                y: types.number(mesh.rotation.y, { range: [-2, 2] }),
-                z: types.number(mesh.rotation.z, { range: [-2, 2] }),
-            }),
-        })
-        const coneObj = sheet.object('Cone', {
-            rotation: types.compound({
-                xR: types.number(cone.rotation.x, { range: [-2, 2] }),
-                yR: types.number(cone.rotation.y, { range: [-2, 2] }),
-                zR: types.number(cone.rotation.z, { range: [-2, 2] }),
-            }),
-
-            position: types.compound({
-                xP: types.number(0, { nudgeMultiplier: 0.1 }),
-                yP: types.number(0, { nudgeMultiplier: 0.1 }),
-                zP: types.number(0, { nudgeMultiplier: 0.1 })
+            gltf.scene.traverse(function (child) {
+                if ((child as THREE.Mesh).isMesh) {
+                    const m = child as THREE.Mesh;
+                    m.castShadow = true;
+                    m.receiveShadow = true;
+                }
             })
-        })
+
+            const gltfObj = sheet.object('model', {
+                rotation: types.compound({
+                    xR: types.number(gltf.scene.rotation.x, {range: [-2, 2]}),
+                    yR: types.number(gltf.scene.rotation.y, {range: [-2, 2]}),
+                    zR: types.number(gltf.scene.rotation.z, {range: [-2, 2]}),
+                }),
+                scale: types.compound({
+                    scale: types.number(gltf.scene.scale.y, {range: [-1000, 1000]})
+                })
+            })
+
+            gltfObj.onValuesChange((values) => {
+                const {scale, zSc} = values.scale
+                gltf.scene.scale.set(scale, scale, scale)
 
 
-        // Apply changes to the object when the values change
-        torusKnotObj.onValuesChange((values) => {
-            const { x, y, z } = values.rotation
+                const {xR, yR, zR} = values.rotation
+                gltf.scene.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
+            })
 
-            mesh.rotation.set(x * Math.PI, y * Math.PI, z * Math.PI)
-        })
-        coneObj.onValuesChange((values) => {
-            const {xP, yP, zP} = values.position
-            cone.position.set(xP,yP,zP)
+            scene.add(gltf.scene);
+
+        }, undefined, function (error) {
+
+            console.error(error);
+
+        });
 
 
-            const { xR, yR, zR } = values.rotation
-            cone.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
-        })
+        /*        const geometryKnot = new THREE.TorusKnotGeometry(10, 3, 300, 16)
+                const materialKnot = new THREE.MeshStandardMaterial({
+                    color: '#049ef4',
+                    metalness: 0.3,
+                    roughness: 0.5,
+                })
+                const mesh = new THREE.Mesh(geometryKnot, materialKnot)
+                mesh.castShadow = true
+                mesh.receiveShadow = true
+                scene.add(mesh)
 
+                const geometryCone = new THREE.ConeGeometry(5, 20, 32);
+                const materialCone = new THREE.MeshStandardMaterial({
+                    color: 0xffff00,
+                    metalness: 0.3,
+                    roughness: 0.99,
+                });
+                const cone = new THREE.Mesh(geometryCone, materialCone);
+                cone.castShadow = true
+                cone.receiveShadow = true
+                scene.add(cone);
+
+
+                const torusKnotObj = sheet.object('Torus Knot', {
+                    // Note that the rotation is in radians
+                    // (full rotation: 2 * Math.PI)
+                    rotation: types.compound({
+                        x: types.number(mesh.rotation.x, {range: [-2, 2]}),
+                        y: types.number(mesh.rotation.y, {range: [-2, 2]}),
+                        z: types.number(mesh.rotation.z, {range: [-2, 2]}),
+                    }),
+                })
+                const coneObj = sheet.object('Cone', {
+                    rotation: types.compound({
+                        xR: types.number(cone.rotation.x, {range: [-2, 2]}),
+                        yR: types.number(cone.rotation.y, {range: [-2, 2]}),
+                        zR: types.number(cone.rotation.z, {range: [-2, 2]}),
+                    }),
+
+                    position: types.compound({
+                        xP: types.number(0, {nudgeMultiplier: 0.1}),
+                        yP: types.number(0, {nudgeMultiplier: 0.1}),
+                        zP: types.number(0, {nudgeMultiplier: 0.1})
+                    })
+                })
+                torusKnotObj.onValuesChange((values) => {
+                    const {x, y, z} = values.rotation
+
+                    mesh.rotation.set(x * Math.PI, y * Math.PI, z * Math.PI)
+                })
+                coneObj.onValuesChange((values) => {
+                    const {xP, yP, zP} = values.position
+                    cone.position.set(xP, yP, zP)
+
+
+                    const {xR, yR, zR} = values.rotation
+                    cone.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
+                })*/
 
 
         /*
@@ -136,7 +170,7 @@
         */
 
         const fog = new THREE.Fog('#1f30b2', 1, 15)
-        const fogObj=sheet.object('Fog', {
+        const fogObj = sheet.object('Fog', {
             color: types.rgba(),
             near: 0,
             far: 100,
@@ -177,16 +211,16 @@
 
         const directionalLightObj = sheet.object('Directional Light', {
             color: types.rgba(),
-            intensity: types.number(1, { range: [0, 10] }),
+            intensity: types.number(1, {range: [0, 10]}),
             position: types.compound({
-                x: types.number(directionalLight.position.x, { nudgeMultiplier: 0.1 }),
-                y: types.number(directionalLight.position.y, { nudgeMultiplier: 0.1 }),
-                z: types.number(directionalLight.position.z, { nudgeMultiplier: 0.1 })
+                x: types.number(directionalLight.position.x, {nudgeMultiplier: 0.1}),
+                y: types.number(directionalLight.position.y, {nudgeMultiplier: 0.1}),
+                z: types.number(directionalLight.position.z, {nudgeMultiplier: 0.1})
             }),
         })
 
         directionalLightObj.onValuesChange((values) => {
-            const { x, y, z } = values.position
+            const {x, y, z} = values.position
             directionalLight.position.set(x, y, z)
 
             directionalLight.color.set(rgbToHex(values.color.r, values.color.g, values.color.b))
@@ -200,16 +234,16 @@
 
         const rectAreaLightObj = sheet.object('Rect Area Light', {
             color: types.rgba(),
-            intensity: types.number(1, { range: [0, 10] }),
+            intensity: types.number(1, {range: [0, 10]}),
             position: types.compound({
-                x: types.number(rectAreaLight.position.x, { nudgeMultiplier: 0.1 }),
-                y: types.number(rectAreaLight.position.y, { nudgeMultiplier: 0.1 }),
-                z: types.number(rectAreaLight.position.z, { nudgeMultiplier: 0.1 })
+                x: types.number(rectAreaLight.position.x, {nudgeMultiplier: 0.1}),
+                y: types.number(rectAreaLight.position.y, {nudgeMultiplier: 0.1}),
+                z: types.number(rectAreaLight.position.z, {nudgeMultiplier: 0.1})
             }),
         })
 
         rectAreaLightObj.onValuesChange((values) => {
-            const { x, y, z } = values.position
+            const {x, y, z} = values.position
             rectAreaLight.position.set(x, y, z)
 
             rectAreaLight.color.set(rgbToHex(values.color.r, values.color.g, values.color.b))
@@ -218,10 +252,16 @@
 
         scene.add(rectAreaLight)
 
-        // const background= new THREE.
+        const bg = new THREE.Color();
 
-        const bg = sheet.object('Background', {
+        const bgObj = sheet.object('Background', {
             color: types.rgba(),
+        })
+
+        bgObj.onValuesChange((values) => {
+            const {color} = values
+            bg.set(rgbToHex(color.r, color.g, color.b))
+            scene.background = bg
         })
 
         // Renderer
