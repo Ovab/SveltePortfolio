@@ -1,8 +1,9 @@
 <script lang="ts">
     import {browser} from '$app/environment';
     import * as THREE from "three";
-    import studio from '@theatre/studio'
+    // import studio from '@theatre/studio'
     import {getProject, types} from '@theatre/core'
+    import projectState from '../Json/homeIntroAnimation.json'
 
     import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
@@ -19,14 +20,12 @@
         return `#${redHex}${greenHex}${blueHex}`;
     }
 
-
     if (browser) {
-        studio.initialize()
+        // studio.initialize()
 
-        const project = getProject('THREE.js x Theatre.js')
-
+        const project = getProject('THREE.js x Theatre.js', { state: projectState })
         const sheet = project.sheet('Animated scene')
-
+        const scene = new THREE.Scene()
 
         const camera = new THREE.PerspectiveCamera()
         camera.aspect = window.innerWidth / window.innerHeight
@@ -62,10 +61,9 @@
             camera.updateProjectionMatrix()
         })
 
-        // Scene
-        const scene = new THREE.Scene()
-
         const loader = new GLTFLoader();
+
+        let modelLoaded = false
         loader.load('src/3d/projectRoom.glb', function (gltf) {
 
             const gltfObj = sheet.object('model', {
@@ -80,7 +78,7 @@
             })
 
             gltfObj.onValuesChange((values) => {
-                const {scale, zSc} = values.scale
+                const {scale} = values.scale
                 gltf.scene.scale.set(scale, scale, scale)
 
 
@@ -90,158 +88,128 @@
 
             scene.add(gltf.scene);
 
+            modelLoaded = true;
         }, undefined, function (error) {
-
             console.error(error);
-
         });
 
+        const overHeadLight = new THREE.DirectionalLight('#ffffff', 10 /* , 0, 1 */)
+        overHeadLight.castShadow = true
 
-        /*        const geometryKnot = new THREE.TorusKnotGeometry(10, 3, 300, 16)
-                const materialKnot = new THREE.MeshStandardMaterial({
-                    color: '#049ef4',
-                    metalness: 0.3,
-                    roughness: 0.5,
-                })
-                const mesh = new THREE.Mesh(geometryKnot, materialKnot)
-                mesh.castShadow = true
-                mesh.receiveShadow = true
-                scene.add(mesh)
+        overHeadLight.shadow.mapSize.width = 200
+        overHeadLight.shadow.mapSize.height = 200
+        overHeadLight.shadow.camera.far = 50
+        overHeadLight.shadow.camera.near = 1
+        overHeadLight.shadow.camera.top = 20
+        overHeadLight.shadow.camera.right = 20
+        overHeadLight.shadow.camera.bottom = -20
+        overHeadLight.shadow.camera.left = -20
 
-                const geometryCone = new THREE.ConeGeometry(5, 20, 32);
-                const materialCone = new THREE.MeshStandardMaterial({
-                    color: 0xffff00,
-                    metalness: 0.3,
-                    roughness: 0.99,
-                });
-                const cone = new THREE.Mesh(geometryCone, materialCone);
-                cone.castShadow = true
-                cone.receiveShadow = true
-                scene.add(cone);
-
-
-                const torusKnotObj = sheet.object('Torus Knot', {
-                    // Note that the rotation is in radians
-                    // (full rotation: 2 * Math.PI)
-                    rotation: types.compound({
-                        x: types.number(mesh.rotation.x, {range: [-2, 2]}),
-                        y: types.number(mesh.rotation.y, {range: [-2, 2]}),
-                        z: types.number(mesh.rotation.z, {range: [-2, 2]}),
-                    }),
-                })
-                const coneObj = sheet.object('Cone', {
-                    rotation: types.compound({
-                        xR: types.number(cone.rotation.x, {range: [-2, 2]}),
-                        yR: types.number(cone.rotation.y, {range: [-2, 2]}),
-                        zR: types.number(cone.rotation.z, {range: [-2, 2]}),
-                    }),
-
-                    position: types.compound({
-                        xP: types.number(0, {nudgeMultiplier: 0.1}),
-                        yP: types.number(0, {nudgeMultiplier: 0.1}),
-                        zP: types.number(0, {nudgeMultiplier: 0.1})
-                    })
-                })
-                torusKnotObj.onValuesChange((values) => {
-                    const {x, y, z} = values.rotation
-
-                    mesh.rotation.set(x * Math.PI, y * Math.PI, z * Math.PI)
-                })
-                coneObj.onValuesChange((values) => {
-                    const {xP, yP, zP} = values.position
-                    cone.position.set(xP, yP, zP)
-
-
-                    const {xR, yR, zR} = values.rotation
-                    cone.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
-                })*/
-
-
-        /*
-         * Lights
-         */
-        // Ambient Light
-        const ambientLight = new THREE.AmbientLight('#ffffff', 0.5)
-        scene.add(ambientLight)
-
-        // Point light
-        const directionalLight = new THREE.DirectionalLight('#ffffff', 10 /* , 0, 1 */)
-        directionalLight.position.y = 20
-        directionalLight.position.z = 20
-
-        directionalLight.castShadow = true
-
-        directionalLight.shadow.mapSize.width = 2048
-        directionalLight.shadow.mapSize.height = 2048
-        directionalLight.shadow.camera.far = 50
-        directionalLight.shadow.camera.near = 1
-        directionalLight.shadow.camera.top = 20
-        directionalLight.shadow.camera.right = 20
-        directionalLight.shadow.camera.bottom = -20
-        directionalLight.shadow.camera.left = -20
-
-        const directionalLightObj = sheet.object('Directional Light', {
+        const overHeadLightObj = sheet.object('Overhead Light', {
             color: types.rgba(),
             intensity: types.number(1, {range: [0, 10]}),
             position: types.compound({
-                x: types.number(directionalLight.position.x, {nudgeMultiplier: 0.1}),
-                y: types.number(directionalLight.position.y, {nudgeMultiplier: 0.1}),
-                z: types.number(directionalLight.position.z, {nudgeMultiplier: 0.1})
+                x: types.number(overHeadLight.position.x, {nudgeMultiplier: 0.1}),
+                y: types.number(overHeadLight.position.y, {nudgeMultiplier: 0.1}),
+                z: types.number(overHeadLight.position.z, {nudgeMultiplier: 0.1})
             }),
         })
-
-        directionalLightObj.onValuesChange((values) => {
+        overHeadLightObj.onValuesChange((values) => {
             const {x, y, z} = values.position
-            directionalLight.position.set(x, y, z)
+            overHeadLight.position.set(x, y, z)
 
-            directionalLight.color.set(rgbToHex(values.color.r, values.color.g, values.color.b))
-            directionalLight.intensity = values.intensity
+            overHeadLight.color.set(rgbToHex(values.color.r, values.color.g, values.color.b))
+            overHeadLight.intensity = values.intensity
         })
+        scene.add(overHeadLight)
 
-        scene.add(directionalLight)
-
-        // RectAreaLight
-        const rectAreaLight = new THREE.RectAreaLight('#ff0', 1, 50, 50)
-
-        const rectAreaLightObj = sheet.object('Rect Area Light', {
+        const certsLight = new THREE.RectAreaLight('#00ffff', 1, 50, 50)
+        const certsLightObj = sheet.object('certsLight', {
             color: types.rgba(),
             intensity: types.number(1, {range: [0, 10]}),
             position: types.compound({
-                x: types.number(rectAreaLight.position.x, {nudgeMultiplier: 0.1}),
-                y: types.number(rectAreaLight.position.y, {nudgeMultiplier: 0.1}),
-                z: types.number(rectAreaLight.position.z, {nudgeMultiplier: 0.1})
+                x: types.number(certsLight.position.x, {nudgeMultiplier: 0.1}),
+                y: types.number(certsLight.position.y, {nudgeMultiplier: 0.1}),
+                z: types.number(certsLight.position.z, {nudgeMultiplier: 0.1})
             }),
+            rotation: types.compound({
+                xR: types.number(certsLight.rotation.x, {range: [-2, 2]}),
+                yR: types.number(certsLight.rotation.y, {range: [-2, 2]}),
+                zR: types.number(certsLight.rotation.z, {range: [-2, 2]}),
+            })
         })
-
-        rectAreaLightObj.onValuesChange((values) => {
+        certsLightObj.onValuesChange((values) => {
             const {x, y, z} = values.position
-            rectAreaLight.position.set(x, y, z)
+            certsLight.position.set(x, y, z)
 
-            rectAreaLight.color.set(rgbToHex(values.color.r, values.color.g, values.color.b))
-            rectAreaLight.intensity = values.intensity
+            certsLight.color.set(rgbToHex(values.color.r, values.color.g, values.color.b))
+            certsLight.intensity = values.intensity
+
+            const {xR, yR, zR} = values.rotation
+            certsLight.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
+        })
+        scene.add(certsLight)
+
+        const screenLight = new THREE.DirectionalLight('#ffffff', 10)
+        screenLight.castShadow = true
+
+        screenLight.shadow.mapSize.width = 200
+        screenLight.shadow.mapSize.height = 200
+
+        screenLight.shadow.camera.far = 50
+        screenLight.shadow.camera.near = 1
+        screenLight.shadow.camera.top = 20
+        screenLight.shadow.camera.right = 20
+        screenLight.shadow.camera.bottom = -20
+        screenLight.shadow.camera.left = -20
+
+        const screenLightObj = sheet.object('Screen Light', {
+            color: types.rgba(),
+            intensity: types.number(1, {range: [0, 10]}),
+            position: types.compound({
+                x: types.number(screenLight.position.x, {nudgeMultiplier: 0.1}),
+                y: types.number(screenLight.position.y, {nudgeMultiplier: 0.1}),
+                z: types.number(screenLight.position.z, {nudgeMultiplier: 0.1})
+            }),
+            rotation: types.compound({
+                xR: types.number(screenLight.rotation.x, {range: [-2, 2]}),
+                yR: types.number(screenLight.rotation.y, {range: [-2, 2]}),
+                zR: types.number(screenLight.rotation.z, {range: [-2, 2]}),
+            })
         })
 
-        scene.add(rectAreaLight)
+        screenLightObj.onValuesChange((values) => {
+            const {x, y, z} = values.position
+            screenLight.position.set(x, y, z)
+
+            screenLight.color.set(rgbToHex(values.color.r, values.color.g, values.color.b))
+            screenLight.intensity = values.intensity
+
+            const {xR, yR, zR} = values.rotation
+            screenLight.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
+        })
+
+
 
         const bg = new THREE.Color();
-
         const bgObj = sheet.object('Background', {
             color: types.rgba(),
         })
-
         bgObj.onValuesChange((values) => {
             const {color} = values
             bg.set(rgbToHex(color.r, color.g, color.b))
             scene.background = bg
         })
 
+
+
         // Renderer
         const renderer = new THREE.WebGLRenderer({antialias: true})
 
         renderer.shadowMap.enabled = true
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap
+        renderer.shadowMap.type = THREE.VSMShadowMap
         renderer.setSize(window.innerWidth, window.innerHeight)
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio,1))
         renderer.render(scene, camera)
 
         document.getElementById('threeBody').appendChild(renderer.domElement)
@@ -253,7 +221,38 @@
             window.requestAnimationFrame(tick)
         }
 
+        function onWindowResize() {
+
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize( window.innerWidth, window.innerHeight );
+
+        }
+
+        function controlAnimation(e) {
+            if (e.key === "r") {
+                sheet.sequence.play()
+            }
+            else if (e.key === "p") {
+                sheet.sequence.play()
+                sheet.sequence.pause()
+            }
+        }
+
+
+            addEventListener('resize', onWindowResize)
+
+        window.addEventListener("keydown", controlAnimation);
+
         tick()
+
+        project.ready.then(() => {
+            for (let i = 0; i < i; i++) {
+                if(modelLoaded) break;
+            }
+            sheet.sequence.play()
+        })
     }
 </script>
 
