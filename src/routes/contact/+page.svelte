@@ -1,6 +1,7 @@
 <script>
     import TextArea from "../../components/TextAreaAutoResize.svelte";
     import NavArrow from "../../components/NavArrow.svelte";
+    import ContactBg from "../../components/contactBg.svelte";
     import { ofetch } from "ofetch";
 
     let naam = "";
@@ -30,7 +31,7 @@
     <meta name="description" content="Dit is de contact pagina, zeer epik" />
 </svelte:head>
 
-<div class="flex flex-row">
+<div class="flex flex-row fixed z-10 w-full fadeIn">
     <NavArrow message="Projects" url="/projects"/>
     <div class="flex flex-col md:flex-row
                 md:place-self-center justify-center
@@ -65,4 +66,23 @@
 
         </div>
     </div>
+
+
 </div>
+
+<ContactBg/>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    .fadeIn{
+        animation: fadeIn 6s;
+    }
+</style>
