@@ -1,5 +1,6 @@
 <script lang="ts">
     import {browser} from '$app/environment';
+    import {onMount} from "svelte";
     import * as THREE from "three";
     // import studio from '@theatre/studio'
     import {getProject, types} from '@theatre/core'
@@ -19,8 +20,8 @@
 
         return `#${redHex}${greenHex}${blueHex}`;
     }
-
-    if (browser) {
+    onMount(() => {
+        if (browser) {
         // studio.initialize()
 
         const project = getProject('THREE.js x Theatre.js', { state: projectState })
@@ -47,7 +48,7 @@
                 yR: types.number(0, {range: [-2, 2]}),
                 zR: types.number(0, {range: [-2, 2]})
             })
-        })
+        }, {reconfigure: true})
         cameraObj.onValuesChange((values) => {
             const {x, y, z} = values.position
             const {xR, yR, zR} = values.rotation
@@ -75,7 +76,7 @@
                 scale: types.compound({
                     scale: types.number(gltf.scene.scale.y, {range: [-1000, 1000]})
                 })
-            })
+            }, {reconfigure: true})
 
             gltfObj.onValuesChange((values) => {
                 const {scale} = values.scale
@@ -113,7 +114,7 @@
                 y: types.number(overHeadLight.position.y, {nudgeMultiplier: 0.1}),
                 z: types.number(overHeadLight.position.z, {nudgeMultiplier: 0.1})
             }),
-        })
+        }, {reconfigure: true})
         overHeadLightObj.onValuesChange((values) => {
             const {x, y, z} = values.position
             overHeadLight.position.set(x, y, z)
@@ -137,7 +138,7 @@
                 yR: types.number(certsLight.rotation.y, {range: [-2, 2]}),
                 zR: types.number(certsLight.rotation.z, {range: [-2, 2]}),
             })
-        })
+        }, {reconfigure: true})
         certsLightObj.onValuesChange((values) => {
             const {x, y, z} = values.position
             certsLight.position.set(x, y, z)
@@ -149,47 +150,6 @@
             certsLight.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
         })
         scene.add(certsLight)
-
-        const screenLight = new THREE.DirectionalLight('#ffffff', 10)
-        screenLight.castShadow = true
-
-        screenLight.shadow.mapSize.width = 200
-        screenLight.shadow.mapSize.height = 200
-
-        screenLight.shadow.camera.far = 50
-        screenLight.shadow.camera.near = 1
-        screenLight.shadow.camera.top = 20
-        screenLight.shadow.camera.right = 20
-        screenLight.shadow.camera.bottom = -20
-        screenLight.shadow.camera.left = -20
-
-        const screenLightObj = sheet.object('Screen Light', {
-            color: types.rgba(),
-            intensity: types.number(1, {range: [0, 10]}),
-            position: types.compound({
-                x: types.number(screenLight.position.x, {nudgeMultiplier: 0.1}),
-                y: types.number(screenLight.position.y, {nudgeMultiplier: 0.1}),
-                z: types.number(screenLight.position.z, {nudgeMultiplier: 0.1})
-            }),
-            rotation: types.compound({
-                xR: types.number(screenLight.rotation.x, {range: [-2, 2]}),
-                yR: types.number(screenLight.rotation.y, {range: [-2, 2]}),
-                zR: types.number(screenLight.rotation.z, {range: [-2, 2]}),
-            })
-        })
-
-        screenLightObj.onValuesChange((values) => {
-            const {x, y, z} = values.position
-            screenLight.position.set(x, y, z)
-
-            screenLight.color.set(rgbToHex(values.color.r, values.color.g, values.color.b))
-            screenLight.intensity = values.intensity
-
-            const {xR, yR, zR} = values.rotation
-            screenLight.rotation.set(xR * Math.PI, yR * Math.PI, zR * Math.PI)
-        })
-
-
 
         const bg = new THREE.Color();
         const bgObj = sheet.object('Background', {
@@ -254,6 +214,7 @@
             sheet.sequence.play()
         })
     }
+    })
 </script>
 
 <div class="fixed" id="threeBody">
