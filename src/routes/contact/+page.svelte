@@ -2,6 +2,7 @@
     import TextArea from "../../components/TextAreaAutoResize.svelte";
     import NavArrow from "../../components/NavArrow.svelte";
     import ContactBg from "../../components/contactBg.svelte";
+    import { PUBLIC_API_URL } from '$env/static/public'
     import { ofetch } from "ofetch";
 
     let naam = "";
@@ -9,7 +10,8 @@
     let bericht = "";
 
     async function submit() {
-        const res = await ofetch('http://localhost:3000/sendContactMail', {
+        console.log(PUBLIC_API_URL)
+        const res = await ofetch(PUBLIC_API_URL+`sendContactMail`, {
             method: 'POST',
             body: {
                 naam:naam,

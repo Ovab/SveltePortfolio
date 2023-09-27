@@ -4,7 +4,7 @@
     import * as THREE from "three";
     // import studio from '@theatre/studio'
     import {getProject, types} from '@theatre/core'
-    import projectState from '../Json/ContactPageIntroAnimation.json'
+    import projectState from '$lib/json/ContactPageIntroAnimation.json'
 
     import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
@@ -65,7 +65,7 @@
             const loader = new GLTFLoader();
 
             let modelLoaded = false
-            loader.load('src/3d/MailRoom.glb', function (gltf) {
+            loader.load('assets/MailRoom.glb', function (gltf) {
 
                 const gltfObj = sheet.object('model', {
                     rotation: types.compound({

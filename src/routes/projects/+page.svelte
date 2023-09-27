@@ -1,7 +1,7 @@
 <script>
     import ProjectBlock from "../../components/ProjectBlock.svelte";
     import NavArrow from "../../components/NavArrow.svelte";
-    import ProjectsJson from "../../Json/Projects.json";
+    import ProjectsJson from "$lib/json/Projects.json";
 </script>
 
 <svelte:head>
