@@ -1,7 +1,7 @@
 <script lang="ts">
     export let tags
 
-    import ProjectsJson from "$lib/json/Projects.json"
+    import ProjectsJson from "$lib/json/projects.json"
 
     let processedTags = []
 
