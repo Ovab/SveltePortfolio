@@ -1,0 +1,11 @@
+#VisualStudioCode
+.vscode/*
+
+node_modules
+
+# Local History for Visual Studio Code
+.history/
+
+.idea/*
+
+.svelte-kit/
