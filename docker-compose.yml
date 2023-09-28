@@ -36,7 +36,7 @@ services:
         env_file:
             - .env
         restart: unless-stopped
-        # Output to port 3000, Node is running on port 3000 as it does by default
+        # Output to port 8000, Node is running on port 3000 as it does by default
         ports:
-            - "3001:3001"
+            - "8000:3001"
         command: "node app.cjs"
