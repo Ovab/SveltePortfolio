@@ -1,8 +1,8 @@
 <script>
-    export let message;
-    export let url;
+    export let message = "";
+    export let url = "";
 
-    export let arrowRight;
+    export let arrowRight = false;
 </script>
 
 <a href="{url}" class="flex flex-col justify-center h-screen {arrowRight ? 'mr-2' : 'ml-2'} ">

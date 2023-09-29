@@ -1,19 +1,19 @@
 <script lang="ts">
     import Tags from "./tags.svelte";
 
-    export let name
-    export let from;
-    export let to;
-    export let korteBeschrijving;
+    export let name = "";
+    export let from = "";
+    export let to = "";
+    export let korteBeschrijving = "";
 
-    export let langeBeschrijving;
-    export let tags;
+    export let langeBeschrijving = "";
+    export let tags = "";
 
-    export let img;
+    export let img = "";
 
-    export let webUrl;
+    export let webUrl = "";
 
-    export let gitUrl;
+    export let gitUrl = "";
 
     let openMore = false;
 
@@ -21,13 +21,13 @@
         openMore = true;
     }
 
-    function closeMoreHandler(event = event) {
+    function closeMoreHandler(event) {
         // make sure you're clicking the black stuff and not inside the info box
         if (event.target.id == "outerDiv") openMore = false;
     }
 </script>
 
-<div class="group cursor-pointer" on:click={openMoreHandler} on:keydown={openMoreHandler} aria-roledescription="click to see more">
+<div class="group cursor-pointer" on:click={openMoreHandler} on:keydown={openMoreHandler} role='button' tabindex="0" aria-roledescription="click to see more">
     <div class="h-[250px] md:h-[250px] rounded bg-gray-500 group-hover:scale-105 transition-all">
         <div class="flex justify-center overflow-hidden">
             <img class="rounded object-cover h-[250px] group-hover:scale-110 transition-all" src="{img}" alt="yYEET">
@@ -44,7 +44,7 @@
 </div>
 
 {#if openMore}
-    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 h-screen w-screen bg-black/40"
+    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 h-screen w-screen bg-black/40" role='button' tabindex="0"
          id="outerDiv" on:click={closeMoreHandler} on:keydown={closeMoreHandler} aria-roledescription="click to see less">
         <div class="bg-white h-fit w-[90vw] md:w-[80vw] rounded flex p-2 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" id="innerDiv">
             <div class="grid grid-cols-2 gap-2">
@@ -52,7 +52,7 @@
                     <img class="rounded object-scale-down group-hover:scale-110 transition-all bg-gray-500 mb-10"
                          src="{img}" alt="yYEET">
 
-                    <Tags tagName="nuxt" tags="{tags}"/>
+                    <Tags tags="{tags}"/>
                 </div>
                 <div class="flex flex-col border-l pl-2">
                     <div class="prose-a:text-blue-500">{@html langeBeschrijving}</div>

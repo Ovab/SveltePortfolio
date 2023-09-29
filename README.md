@@ -9,16 +9,31 @@ npm run dev
 npm run dev -- --open
 ```
 
-And then start it for expressJS if you want the mailer to work:
+### .env variables
 
-Enter your email credentials in the .env file (see example .env), if you're using gmail it's advised to use an [app password](https://support.google.com/accounts/answer/185833?hl=en) instead of your normal password.
+Enter your gmail credentials in the .env file (see example .env), use gmail and make an [app password](https://support.google.com/accounts/answer/185833?hl=en) instead of your normal password.
 
 ```bash
 node app.cjs
 ```
 
-## Building
+## Production
 
+Pull the repo on your server and install dependencies with `npm install` (or `pnpm install` or `yarn`).
+add the .env file to the root of the project.
+
+### Docker (recommended)
+
+After installing docker and docker-compose simply run the following command in the root of the project:
+
+```bash
+docker-compose up -d
+```
+
+Now you can access the app on port 80 of your server, api should be on port 8000.
+
+
+### Regular server
 To create a production version of your app:
 
 ```bash
@@ -27,4 +42,5 @@ npm run build
 
 You can preview the production build with `npm run preview`.
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+To use this app on a regular non Docker server I'd reccomend using [pm2](https://pm2.keymetrics.io/) to run the app and its api.
+I did not make a pm2 config file for this app so you'll have to make one yourself.
