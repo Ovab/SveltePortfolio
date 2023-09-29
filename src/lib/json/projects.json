@@ -142,6 +142,84 @@
                 "tailwind",
                 "laravel"
             ]
+        },
+        "sampleProject6": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },
+        "sampleProject7": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },
+        "sampleProject8": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },
+        "sampleProject9": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },
+        "sampleProject10": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
+        },
+        "sampleProject11": {
+            "name": "Sample Project",
+            "korteBeschrijving": "sample text",
+            "langeBeschrijving": "sample text",
+            "img": "assets/test.jpg",
+            "gitUrl": "Ovab/BkChess",
+            "webUrl": "https://chess.bavoknol.nl",
+            "tags": [
+                "svelte",
+                "tailwind",
+                "laravel"
+            ]
         }
     }
 }

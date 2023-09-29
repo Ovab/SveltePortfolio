@@ -5,7 +5,7 @@
     export let arrowRight = false;
 </script>
 
-<a href="{url}" class="flex flex-col justify-center h-screen {arrowRight ? 'mr-2' : 'ml-2'} ">
+<a href="{url}" class="flex flex-col justify-center h-screen {arrowRight ? 'mr-2 ml-auto' : 'ml-2 mr-auto'} ">
     {#if arrowRight}
         <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" fill="currentColor" class="bi bi-arrow-right"
              viewBox="0 0 16 16">
