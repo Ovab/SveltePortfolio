@@ -28,9 +28,9 @@
 </script>
 
 <div class="group cursor-pointer" on:click={openMoreHandler} on:keydown={openMoreHandler} role='button' tabindex="0" aria-roledescription="click to see more">
-    <div class="h-[250px] md:h-[250px] rounded bg-gray-500 group-hover:scale-105 transition-all">
+    <div class="h-[250px] md:h-[10vh] rounded bg-gray-500 group-hover:scale-105 transition-all">
         <div class="flex justify-center overflow-hidden">
-            <img class="rounded object-cover h-[250px] group-hover:scale-110 transition-all" src="{img}" alt="yYEET">
+            <img class="rounded object-cover h-[250px] md:h-[10vh] group-hover:scale-110 transition-all" src="{img}" alt="yYEET">
         </div>
         <div class="relative -translate-y-[100px] xl:-translate-y-[70px] bg-gray-800/70 h-[100px] xl:h-[70px] rounded grid grid-cols-2">
             <div>
