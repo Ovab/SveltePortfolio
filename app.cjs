@@ -25,6 +25,40 @@ if(exit) {
 
 
 
+app.post('/getProjects', (req, res) => {
+    const mysql = require('mysql2');
+
+    const conn = mysql.createConnection({
+        host: "localhost",
+        user: "rootUser",
+        password: "root",
+        database: 'root'
+    });
+
+    conn.connect(function(err) {
+        if (err) throw err;
+        console.log("Connected!");
+    });
+
+    conn.execute(
+        'SELECT * FROM `projects`',
+        function(err, results, fields) {
+            console.log(results);
+        }
+    )
+
+
+
+
+
+
+    res.status(200)
+
+    res.send('succes')
+
+    res.end();
+})
+
 app.post('/sendContactMail', (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -50,7 +84,6 @@ app.post('/sendContactMail', (req, res) => {
 
                     res.send("errorcode21SHITISGOOFED")
                     res.end()
-                    return null;
                 } else {
                     res.status(200)
 
@@ -58,7 +91,9 @@ app.post('/sendContactMail', (req, res) => {
 
                     res.end();
                 }
+                return null;
             }
+
         )
     }
 );

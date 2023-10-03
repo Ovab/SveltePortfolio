@@ -17,8 +17,8 @@
 </script>
 
 
-<div class="flex flex-wrap">
+<div class="flex flex-wrap h-fit gap-1.5 mt-0.5">
     {#each processedTags as tag}
-        <span class=" ml-2 rounded p-0.5" style="background-color: {tag.color}">{tag.name}</span>
+        <span class="rounded p-0.5" style="background-color: {tag.color}">{tag.name}</span>
     {/each}
 </div>

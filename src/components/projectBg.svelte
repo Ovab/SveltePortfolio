@@ -8,6 +8,8 @@
 
     import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 
+    export let animationDone = false
+
     function rgbToHex(r, g, b) {
         const toHex = (value) => {
             const hex = Math.round(value * 255).toString(16);
@@ -166,7 +168,14 @@
             function controlAnimation(e) {
                 if (document.activeElement.type) return;
                 if (e.key === "r") {
+                    animationDone = false
                     sheet.sequence.play()
+                    window.setTimeout(
+                        () => {
+                            animationDone = true
+                        },
+                        4000
+                    )
                 }
                 else if (e.key === "p") {
                     sheet.sequence.play()
@@ -185,7 +194,14 @@
                 for (let i = 0; i < i; i++) {
                     if(modelLoaded) break;
                 }
+                console.log(sheet.sequence)
                 sheet.sequence.play()
+                window.setTimeout(
+                    () => {
+                        animationDone = true
+                    },
+                    4000
+                )
             })
         }
     })

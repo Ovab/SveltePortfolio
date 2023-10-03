@@ -3,11 +3,13 @@
     import NavArrow from "../../components/NavArrow.svelte";
     import ProjectsJson from "$lib/json/projects.json";
     import ProjectBg from "../../components/projectBg.svelte";
+
+    let animationDone = false;
 </script>
 
 <svelte:head>
     <title>Projecten</title>
-    <meta name="description" content="Dit is de projecten pagina, zeer epik" />
+    <meta name="description" content="Dit is de projecten pagina, zeer epik"/>
 </svelte:head>
 
 <div class="h-full w-full flex flex-row fixed z-10">
@@ -18,38 +20,48 @@
                 overflow-y-auto overflow-x-clip">
         <h2 class="text-2xl text-center">Werk</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 grid-rows-1 mt-3 mx-2 gap-2">
-            {#each Object.values(ProjectsJson.werk) as project}
-                <ProjectBlock
-                    name={project.name}
-                    from="{project.from}"
-                    to="{project.to}"
-                    korteBeschrijving={project.korteBeschrijving}
-                    langeBeschrijving={project.langeBeschrijving}
-                    tags={project.tags}
-                    img={project.img}
-                    webUrl={project.webUrl}
-                    gitUrl={project.gitUrl}
-                />
+            {#each Object.values(ProjectsJson.werk) as project, counter}
+                <div class="h-[250px] md:h-[10vh] xl:h-[30vh]">
+                    <ProjectBlock
+                        name={project.name}
+                        from="{project.from}"
+                        to="{project.to}"
+                        korteBeschrijving={project.korteBeschrijving}
+                        langeBeschrijving={project.langeBeschrijving}
+                        tags={project.tags}
+                        img={project.img}
+                        alt={project.alt}
+                        webUrl={project.webUrl}
+                        gitUrl={project.gitUrl}
+                        animationDone={animationDone}
+                        counter="{counter}"
+                    />
+                </div>
             {/each}
         </div>
         <h2 class="text-2xl text-center">Projecten</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 grid-rows-1 mt-3 mx-4 gap-2">
-            {#each Object.values(ProjectsJson.projecten) as project}
-                <ProjectBlock
-                    name={project.name}
-                    from="{project.from}"
-                    to="{project.to}"
-                    korteBeschrijving={project.korteBeschrijving}
-                    langeBeschrijving={project.langeBeschrijving}
-                    tags={project.tags}
-                    img={project.img}
-                    webUrl={project.webUrl}
-                    gitUrl={project.gitUrl}
-                />
+            {#each Object.values(ProjectsJson.projecten) as project, counter}
+                <div class="h-[250px] md:h-[10vh] xl:h-[30vh]">
+                    <ProjectBlock
+                        name={project.name}
+                        from="{project.from}"
+                        to="{project.to}"
+                        korteBeschrijving={project.korteBeschrijving}
+                        langeBeschrijving={project.langeBeschrijving}
+                        tags={project.tags}
+                        img={project.img}
+                        alt={project.alt}
+                        webUrl={project.webUrl}
+                        gitUrl={project.gitUrl}
+                        animationDone={animationDone}
+                        counter="{counter}"
+                    />
+                </div>
             {/each}
         </div>
     </div>
     <NavArrow message="Contact" url="/contact" arrowRight=true/>
 </div>
 
-<ProjectBg/>
+<ProjectBg bind:animationDone={animationDone}/>

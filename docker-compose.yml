@@ -1,6 +1,24 @@
 version: "3"
 
 services:
+    db:
+        # MySQL Image used for the database
+        image: mysql
+        ports:
+            - 3306:3306
+        volumes:
+            - ./database:/var/lib/mysql
+        env_file:
+            - .env
+    phpmyadmin:
+        # PHP my admin to manage the database
+        image: phpmyadmin
+        # Port 8080 is mapped to be used on the outside as to not conflict with the apache build
+        ports:
+            - 8080:80
+        # Depends on db to start first
+        depends_on:
+            - db
     portfolio-site:
         container_name: portfolio-site
         build:

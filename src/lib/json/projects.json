@@ -10,11 +10,11 @@
         },
         "svelte": {
             "name": "Svelte",
-            "color": "#ff0080"
+            "color": "#ff3e00"
         },
         "laravel": {
             "name": "Laravel",
-            "color": "#ff2e63"
+            "color": "#ef3d2f"
         }
     },
     "werk": {
@@ -109,6 +109,7 @@
             "korteBeschrijving": "sample text",
             "langeBeschrijving": "sample text",
             "img": "assets/test.jpg",
+            "alt": "sample text",
             "gitUrl": "Ovab/BkChess",
             "webUrl": "https://chess.bavoknol.nl",
             "tags": [
