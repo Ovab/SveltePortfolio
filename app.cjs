@@ -43,7 +43,12 @@ app.post('/getProjects', async (req, res) => {
     function query(werk = 0) {
         return new Promise((resolve, reject) => {
             conn.execute(
-                "SELECT projects.name as projName, projects.from, projects.to, korteBeschrijving, langeBeschrijving, img, alt, giturl, weburl, werk, Tags.name as tagName, Tags.color FROM `projects` JOIN Tags_has_projects on `projects`.`id` = `projects_id` JOIN `Tags` on `Tags_has_projects`.`Tags_id` = `Tags`.`id` where werk = ?",
+                "SELECT projects.name as projName, projects.from, projects.to, korteBeschrijving, langeBeschrijving, img, alt, giturl, weburl, werk, JSON_ARRAYAGG(JSON_OBJECT('name', Tags.name, 'color', Tags.color)) AS tags\n" +
+                "FROM `projects`\n" +
+                "JOIN `koppel-project-tags` on `projects`.`id` = `projectID`\n" +
+                "JOIN `Tags` on `koppel-project-tags`.`TagsID` = `Tags`.`id`\n" +
+                "WHERE werk = ?\n" +
+                "GROUP BY projects.id",
                 [werk], // Pass the parameter as an array here
                 function (err, results, fields) {
                     if (err) {
@@ -103,9 +108,10 @@ app.post('/addProject', async (req, res) => {
                     req.body.to,
                     req.body.korteBeschrijving,
                     req.body.langeBeschrijving,
-                    req.body.img, req.body.alt,
-                    req.body.giturl,
-                    req.body.weburl,
+                    req.body.img,
+                    req.body.alt,
+                    req.body.gitUrl,
+                    req.body.webUrl,
                     req.body.werk
                 ],
                 function (err, results, fields) {
@@ -119,29 +125,33 @@ app.post('/addProject', async (req, res) => {
         });
     }
 
-    function queryTagsInsert(){
-        return new Promise((resolve, reject) => {
-            conn.execute(
-                "INSERT INTO `Tags_has_projects` (`Tags_id`, `projects_id`) VALUES (?, ?)",
-                [
-                    req.body.tag,
-                    req.body.id
-                ],
-                function (err, results, fields) {
-                    if (err) {
-                        reject(err)
+    function queryTagsInsert(tagsRes){
+        for (const tagID in req.body.tags) {
+            console.log(tagID, tagsRes.insertId)
+            new Promise((resolve, reject) => {
+                conn.execute(
+                    "INSERT INTO `koppel-project-tags` (`projectID`, `TagsID`) VALUES (?, ?)",
+                    [
+                        tagsRes.insertId,
+                        req.body.tags[tagID]
+                    ],
+                    function (err, results, fields) {
+                        if (err) {
+                            reject(err)
+                        }
+                        resolve(results)
                     }
-                    resolve(results)
-                    return results
-                }
-            )
-        });
+                )
+            });
+        }
+        return null;
     }
 
     const tagsRes = await queryProjInsert();
+    await queryTagsInsert(tagsRes);
 
     res.send({
-        tags: tagsRes
+        "status": "succes"
     })
 });
 

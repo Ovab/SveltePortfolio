@@ -10,7 +10,6 @@
     let bericht = "";
 
     async function submit() {
-        console.log(PUBLIC_API_URL)
         const res = await ofetch(PUBLIC_API_URL+`sendContactMail`, {
             method: 'POST',
             body: {
