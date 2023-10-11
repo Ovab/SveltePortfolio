@@ -46,7 +46,7 @@
         document.getElementById(id).classList.toggle('brightness-100');
     }
 
-    async function submitForm() {
+    async function addProject() {
         // get all the values from the form and put in object
         let form = document.forms[0];
         let formValues = {};
@@ -67,6 +67,28 @@
             method: 'POST',
             body: JSON.stringify(formValues)
         }).then((res) => {
+            getProjects();
+            return res;
+        })
+            .catch((err) => {
+                err.data;
+            });
+    }
+
+    async function addTags() {
+        let form = document.forms[0];
+        let formValues = {};
+        for (let i = 0; i < form.length; i++) {
+            if (form[i].value !== '') formValues[form[i].name] = form[i].value;
+            else formValues[form[i].name] = null;
+        }
+
+        // send formValues to api
+        await ofetch(PUBLIC_API_URL + `addTag`, {
+            method: 'POST',
+            body: JSON.stringify(formValues)
+        }).then((res) => {
+            getTags();
             return res;
         })
             .catch((err) => {
@@ -134,7 +156,8 @@
                 </div>
                 <div class="flex flex-col ml-2 gap-1 pb-2">
                     {#each availableTags as tag}
-                        <span style="background-color: {tag.color}" class="bg-pink-300 p-1 rounded w-[40%]">{tag.name}</span>
+                        <span style="background-color: {tag.color}"
+                              class="bg-pink-300 p-1 rounded w-[40%]">{tag.name}</span>
                     {/each}
                 </div>
             </div>
@@ -144,7 +167,7 @@
     <div class="w-full py-2 bg-gray-300 border-l-2 border-black">
         {#if editorMode && !tagEditorMode}
             NIEUW {newWerk ? 'WERK' : 'PROJECT'} ITEM:
-            <form class="flex flex-col mt-5 ml-2 gap-2 w-fit" on:submit={submitForm}>
+            <form class="flex flex-col mt-5 ml-2 gap-2 w-fit" on:submit={addProject}>
                 <span class="text-xs">Naam</span> <input name="name" class="rounded ml-2 w-fit" type="text" required>
                 <span class="text-xs">From Date</span> <input type="date" name="from" class="rounded ml-2 w-fit"/>
                 <span class="text-xs">To Date</span> <input type="date" name="to" class="rounded ml-2 w-fit"/>
@@ -184,6 +207,15 @@
             </form>
         {:else if editorMode && tagEditorMode}
             TAG EDITOR
+
+            <form class="flex flex-col mt-5 ml-2 gap-2 w-fit" on:submit={addTags}>
+                <span class="text-xs">Naam</span> <input name="name" class="rounded ml-2 w-fit" type="text" required>
+                <span class="text-xs">Kleur</span> <input name="color" class="rounded ml-2 border-black" type="color"
+                                                          required>
+
+                <input type="submit" class="bg-gradient-to-r from-[#eda4b2] to-[#58c8f2]
+                                            rounded cursor-pointer mt-3" name="submit" value="submit">
+            </form>
         {:else}
             <h3 class="text-3xl font-semibold">Select function in side bar</h3>
 

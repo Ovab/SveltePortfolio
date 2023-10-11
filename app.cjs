@@ -132,7 +132,7 @@ app.post('/addProject', async (req, res) => {
         });
     }
 
-    function queryTagsInsert(tagsRes){
+    function queryTagsInsert(tagsRes) {
         for (const tagID in req.body.tags) {
             new Promise((resolve, reject) => {
                 conn.execute(
@@ -161,6 +161,32 @@ app.post('/addProject', async (req, res) => {
     })
 });
 
+app.post('/addTag', async (req, res) => {
+    function tagInsert(tagsRes) {
+        new Promise((resolve, reject) => {
+            conn.execute(
+                "INSERT INTO `Tags` (`name`, `color`) VALUES (?, ?)",
+                [
+                    req.body.name,
+                    req.body.color
+                ],
+                function (err, results, fields) {
+                    if (err) {
+                        reject(err)
+                    }
+                    resolve(results)
+                }
+            )
+        });
+        return null;
+    }
+
+    await tagInsert();
+
+    res.send({
+        "status": "succes"
+    })
+});
 
 app.post('/sendContactMail', (req, res) => {
     const transporter = nodemailer.createTransport({
