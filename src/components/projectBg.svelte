@@ -194,7 +194,6 @@
                 for (let i = 0; i < i; i++) {
                     if(modelLoaded) break;
                 }
-                console.log(sheet.sequence)
                 sheet.sequence.play()
                 window.setTimeout(
                     () => {

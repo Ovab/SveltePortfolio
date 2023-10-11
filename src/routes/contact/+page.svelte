@@ -19,7 +19,9 @@
             }
         }).catch((err) => {
             err.data; alert('Er is iets misgegaan, stuur aub handmatig een email met de gegevens hier naast')
-        });
+        }).then((res) => {
+            return res.data
+        })
 
         if(res==='success') {
             alert('Het bericht is verstuurd')

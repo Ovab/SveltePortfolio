@@ -100,6 +100,13 @@ app.post('/getTags', async (req, res) => {
 app.post('/addProject', async (req, res) => {
     function queryProjInsert() {
         return new Promise((resolve, reject) => {
+            // make all data passed into the query that is undefined null
+            for (const key in req.body) {
+                if (req.body[key] === undefined) {
+                    req.body[key] = null;
+                }
+            }
+
             conn.execute(
                 "INSERT INTO `projects` (`name`, `from`, `to`, `korteBeschrijving`, `langeBeschrijving`, `img`, `alt`, `giturl`, `weburl`, `werk`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [
@@ -127,7 +134,6 @@ app.post('/addProject', async (req, res) => {
 
     function queryTagsInsert(tagsRes){
         for (const tagID in req.body.tags) {
-            console.log(tagID, tagsRes.insertId)
             new Promise((resolve, reject) => {
                 conn.execute(
                     "INSERT INTO `koppel-project-tags` (`projectID`, `TagsID`) VALUES (?, ?)",
