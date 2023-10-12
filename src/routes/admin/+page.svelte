@@ -7,10 +7,33 @@
     let werkRes = null;
 
     let activeTags = [];
-    let editorMode = false
+    let addMode = false
+    let tagAdderMode = false;
+
+    let editorMode = false;
     let tagEditorMode = false;
+    let editingID = null;
+
     let newWerk = false;
 
+
+    function checkIfActive(name) {
+        let toCheck = newWerk ? werkRes : projRes;
+        // get the project you're editing by the id
+        let project = toCheck.find((project) => {
+            return project.id === editingID;
+        });
+
+        // check if the project has the tag
+        for (let i = 0; i < project.tags.length; i++) {
+            if (project.tags[i].name === name) {
+                // if so, add it to the activeTags array and return true to add the active class
+                activeTags.push(project.tags[i].id);
+                return true
+            }
+        }
+        return false;
+    }
     function activateButt(id) {
         // check if the button is already active, if so remove it from the activeTags array
         if (activeTags.includes(id)) {
@@ -21,22 +44,59 @@
         document.getElementById(id).classList.toggle('!brightness-100');
     }
 
-    function fillEdit(project){
-        editorMode = true;
-        tagEditorMode = false;
-        newWerk = 1;
+    function startAdd(werk) {
+        addMode = true;
+        newWerk = werk;
+        tagAdderMode = false;
 
-        setTimeout(()=>{
+        editorMode = false;
+        tagEditorMode = false;
+        editingID = null;
+        // check if form needs to be cleared
+        setTimeout(() => {
+            let form = document.forms[0];
+            if (form[0].value !== '') {
+                for (let i = 0; i < form.length; i++) {
+                    if (form[i].name === 'submit') continue;
+                    form[i].value = '';
+                }
+            }
+        }, 0)
+
+    }
+
+    function startEdit(project = null, werk = false) {
+        editorMode = true;
+        tagAdderMode = false;
+        newWerk = werk;
+        editingID = project.id;
+
+
+        // timeout van 0ms zodat de form al gerenderd is
+        setTimeout(() => {
             let form = document.forms[0];
 
             for (let i = 0; i < form.length; i++) {
-                if(form[i].name === 'to' || project[form[i].name] === 'from'){
-                    console.log(project, form[i].name, project[form[i].name]);
+                if (form[i].name === 'submit') continue;
+                if (form[i].name === 'to' || form[i].name === 'from') {
+                    if (project[form[i].name] === null) continue;
+
+                    const inputDate = new Date(project[form[i].name]);
+
+                    function padNumber(num) {
+                        return num.toString().padStart(2, '0');
+                    }
+
+                    const year = inputDate.getUTCFullYear();
+                    const month = padNumber(inputDate.getUTCMonth() + 1); // Months are zero-based
+                    const day = padNumber(inputDate.getUTCDate());
+
+                    project[form[i].name] = `${year}-${month}-${day}`;
                 }
 
                 form[i].value = project[form[i].name];
             }
-        }, 100)
+        }, 0)
     }
 
     async function getTags() {
@@ -80,17 +140,21 @@
         // add tags to formValues
         formValues.tags = activeTags;
 
+        if(editorMode){
+            await deleteThing(editingID, true);
+        }
+
         // send formValues to api
         await ofetch(PUBLIC_API_URL + `addProject`, {
             method: 'POST',
             body: JSON.stringify(formValues)
         }).then((res) => {
             getProjects();
-            alert('project added')
+            alert('project ' + (editorMode ? 'edited' : 'added') + ' successfully')
             return res;
         })
             .catch((err) => {
-                alert('project not added')
+                alert('project not ' + (editorMode ? 'edited' : 'added') + ' successfully')
                 err.data;
             });
     }
@@ -116,22 +180,24 @@
             });
     }
 
-    async function deleteThing (id, project = false) {
-        let API = project ? 'removeProject' :'removeTag';
+    async function deleteThing(id, project = false) {
+        let API = project ? 'removeProject' : 'removeTag';
 
         // send formValues to api
         await ofetch(PUBLIC_API_URL + API, {
             method: 'POST',
-            body: JSON.stringify({id:id})
+            body: JSON.stringify({id: id})
         }).then((res) => {
             getTags();
-            alert((project ? 'project': 'tag') + ' deleted')
+            if(!editorMode)alert((project ? 'project' : 'tag') + ' deleted')
             return res;
         })
             .catch((err) => {
-                alert((project ? 'project': 'tag') + ' not deleted')
+                if(!editorMode)alert((project ? 'project' : 'tag') + ' not deleted')
                 err.data;
             });
+
+        if(editorMode) return;
 
         await getProjects();
         await getTags();
@@ -153,13 +219,9 @@
             <div>
                 <div class="flex justify-between mr-5">
                     Werk
-                    <button on:click={
-                    ()=>{
-                        editorMode = true;
-                        tagEditorMode = false;
-                        newWerk = 1;
-                    }
-                        }>+
+                    <button on:click={()=>{
+                        startAdd(1);
+                    }}>+
                     </button>
                 </div>
                 <div class="flex flex-col gap-2 ml-2">
@@ -167,7 +229,7 @@
                         <span class="flex justify-between bg-purple-500 rounded p-1 w-[60%]">
                             <button on:click={
                                 ()=>{
-                                    fillEdit(werk);
+                                    startEdit(werk, true);
                                 }}>
                                 {werk.projName}
                             </button>
@@ -185,19 +247,19 @@
             <div>
                 <div class="flex justify-between mr-5">
                     Projecten
-                    <button on:click={
-                    ()=>{
-                        editorMode = true;
-                        tagEditorMode = false;
-                        newWerk = 0;
-                    }
-                        }>+
+                    <button on:click={()=>{
+                        startAdd(0);
+                    }}>+
                     </button>
                 </div>
                 <div class="flex flex-col ml-2">
                     {#each projRes as project}
                         <span class="flex justify-between bg-purple-500 rounded p-1 w-[60%]">
-                            {project.projName}
+                                <button on:click={()=>{
+                                    startEdit(project, false);
+                                }}>
+                                {project.projName}
+                            </button>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                  class="cursor-pointer" viewBox="0 0 16 16"
                                  on:click={()=>deleteThing(project.id, true)}>
@@ -214,7 +276,7 @@
             <div>
                 <div class="flex justify-between mr-5">
                     Tags
-                    <button on:click={()=>{editorMode=true; tagEditorMode=true}}>+</button>
+                    <button on:click={()=>{addMode=true; tagAdderMode=true}}>+</button>
                 </div>
                 <div class="flex flex-col ml-2 gap-1 pb-2">
                     {#each availableTags as tag}
@@ -233,8 +295,8 @@
     </div>
 
     <div class="w-full py-2 bg-gray-300 border-l-2 border-black">
-        {#if editorMode && !tagEditorMode}
-            NIEUW {newWerk ? 'WERK' : 'PROJECT'} ITEM:
+        {#if (addMode || editorMode) && !tagAdderMode}
+            {editorMode ? 'EDIT' : 'NIEUW'} {newWerk ? 'WERK' : 'PROJECT'} ITEM:
             <form class="flex flex-col mt-5 ml-2 gap-2 w-fit" on:submit={addProject}>
                 <span class="text-xs">Naam</span><input type="text"
                                                         name="projName"
@@ -249,6 +311,7 @@
                                                             class="rounded ml-2 w-fit"/>
 
                 <span class="text-xs">Korte beschrijving</span> <input type="text"
+                                                                       maxlength="255"
                                                                        name="korteBeschrijving"
                                                                        class="rounded ml-2 w-fit">
 
@@ -261,6 +324,7 @@
                                                         class="rounded ml-2 w-fit">
 
                 <span class="text-xs">Alt</span> <input type="text"
+                                                        maxlength="150"
                                                         name="alt"
                                                         class="rounded ml-2 w-fit">
 
@@ -273,7 +337,8 @@
                                                             class="rounded ml-2 w-fit">
                 <div class="flex">
                     {#if newWerk}
-                        <span class="text-xs w-fit">Werk</span><input type="checkbox" name="werk" class="w-fit ml-2 mt-px" checked/>
+                        <span class="text-xs w-fit">Werk</span><input type="checkbox" name="werk"
+                                                                      class="w-fit ml-2 mt-px" checked/>
 
                     {:else}
                         <span class="text-xs w-fit">Werk</span>
@@ -285,21 +350,30 @@
 
                 <span class="text-xs w-fit">Tags</span>
                 <div class="w-fit ml-2 mt-1 flex gap-2">
-                    {#if availableTags != null}
+                    {#if availableTags != null && editorMode}
                         {#each availableTags as tag}
-                            <div class="bg-pink-300 p-1.5 rounded cursor-pointer brightness-50 select-none"
+                            <div class="bg-pink-300 p-1.5 rounded cursor-pointer brightness-50 select-none {checkIfActive(tag.name) ? '!brightness-100' : ''}"
                                  on:click={() => {activateButt(tag.id)}}
                                  id="{tag.id}" style="background-color: {tag.color}">
                                 {tag.name}
                             </div>
                         {/each}
+
+                        {:else}
+                            {#each availableTags as tag}
+                                <div class="bg-pink-300 p-1.5 rounded cursor-pointer brightness-50 select-none"
+                                     on:click={() => {activateButt(tag.id)}}
+                                     id="{tag.id}" style="background-color: {tag.color}">
+                                    {tag.name}
+                                </div>
+                            {/each}
                     {/if}
                 </div>
 
                 <input type="submit" class="bg-gradient-to-r from-[#eda4b2] to-[#58c8f2]
                                             rounded cursor-pointer mt-3" name="submit" value="submit">
             </form>
-        {:else if editorMode && tagEditorMode}
+        {:else if addMode && tagAdderMode}
             TAG EDITOR
 
             <form class="flex flex-col mt-5 ml-2 gap-2 w-fit" on:submit={addTags}>

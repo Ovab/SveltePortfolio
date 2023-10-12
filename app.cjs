@@ -43,11 +43,11 @@ app.post('/getProjects', async (req, res) => {
     function query(werk = 0) {
         return new Promise((resolve, reject) => {
             conn.execute(
-                "SELECT projects.id, projects.name as projName, projects.from, projects.to, korteBeschrijving, langeBeschrijving, img, alt, giturl, weburl, werk, JSON_ARRAYAGG(JSON_OBJECT('name', Tags.name, 'color', Tags.color)) AS tags\n" +
-                "FROM `projects`\n" +
-                "LEFT JOIN `koppel-project-tags` on `projects`.`id` = `projectID`\n" +
-                "LEFT JOIN `Tags` on `koppel-project-tags`.`TagsID` = `Tags`.`id`\n" +
-                "WHERE werk = ?\n" +
+                "SELECT projects.id, projects.name as projName, projects.from, projects.to, korteBeschrijving, langeBeschrijving, img, alt, giturl, weburl, werk, JSON_ARRAYAGG(JSON_OBJECT('id', Tags.id, 'name', Tags.name, 'color', Tags.color)) AS tags " +
+                "FROM `projects`" +
+                "LEFT JOIN `koppel-project-tags` ON `projects`.`id` = `projectID` " +
+                "LEFT JOIN `Tags` ON `koppel-project-tags`.`TagsID` = `Tags`.`id` " +
+                "WHERE werk = ? " +
                 "GROUP BY projects.id",
                 [werk], // Pass the parameter as an array here
                 function (err, results, fields) {
