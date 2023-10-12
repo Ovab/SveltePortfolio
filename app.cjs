@@ -43,10 +43,10 @@ app.post('/getProjects', async (req, res) => {
     function query(werk = 0) {
         return new Promise((resolve, reject) => {
             conn.execute(
-                "SELECT projects.name as projName, projects.from, projects.to, korteBeschrijving, langeBeschrijving, img, alt, giturl, weburl, werk, JSON_ARRAYAGG(JSON_OBJECT('name', Tags.name, 'color', Tags.color)) AS tags\n" +
+                "SELECT projects.id, projects.name as projName, projects.from, projects.to, korteBeschrijving, langeBeschrijving, img, alt, giturl, weburl, werk, JSON_ARRAYAGG(JSON_OBJECT('name', Tags.name, 'color', Tags.color)) AS tags\n" +
                 "FROM `projects`\n" +
-                "JOIN `koppel-project-tags` on `projects`.`id` = `projectID`\n" +
-                "JOIN `Tags` on `koppel-project-tags`.`TagsID` = `Tags`.`id`\n" +
+                "LEFT JOIN `koppel-project-tags` on `projects`.`id` = `projectID`\n" +
+                "LEFT JOIN `Tags` on `koppel-project-tags`.`TagsID` = `Tags`.`id`\n" +
                 "WHERE werk = ?\n" +
                 "GROUP BY projects.id",
                 [werk], // Pass the parameter as an array here
@@ -110,15 +110,15 @@ app.post('/addProject', async (req, res) => {
             conn.execute(
                 "INSERT INTO `projects` (`name`, `from`, `to`, `korteBeschrijving`, `langeBeschrijving`, `img`, `alt`, `giturl`, `weburl`, `werk`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [
-                    req.body.name,
+                    req.body.projName,
                     req.body.from,
                     req.body.to,
                     req.body.korteBeschrijving,
                     req.body.langeBeschrijving,
                     req.body.img,
                     req.body.alt,
-                    req.body.gitUrl,
-                    req.body.webUrl,
+                    req.body.giturl,
+                    req.body.weburl,
                     req.body.werk
                 ],
                 function (err, results, fields) {
@@ -161,6 +161,51 @@ app.post('/addProject', async (req, res) => {
     })
 });
 
+app.post('/removeProject', async (req, res) => {
+    function projRemove() {
+        new Promise((resolve, reject) => {
+            conn.execute(
+                "DELETE FROM `projects` WHERE `projects`.`id` = ?",
+                [
+                    req.body.id
+                ],
+                function (err, results, fields) {
+                    if (err) {
+                        reject(err)
+                    }
+                    resolve(results)
+                }
+            )
+        });
+        return null;
+    }
+
+    function projKoppelRemove() {
+        new Promise((resolve, reject) => {
+            conn.execute(
+                "DELETE FROM `koppel-project-tags` WHERE `koppel-project-tags`.`projectID` = ?",
+                [
+                    req.body.id
+                ],
+                function (err, results, fields) {
+                    if (err) {
+                        reject(err)
+                    }
+                    resolve(results)
+                }
+            )
+        });
+        return null;
+    }
+
+    await projRemove();
+    await projKoppelRemove();
+
+    res.send({
+        "status": "succes"
+    })
+});
+
 app.post('/addTag', async (req, res) => {
     function tagInsert(tagsRes) {
         new Promise((resolve, reject) => {
@@ -182,6 +227,51 @@ app.post('/addTag', async (req, res) => {
     }
 
     await tagInsert();
+
+    res.send({
+        "status": "succes"
+    })
+});
+
+app.post('/removeTag', async (req, res) => {
+    function tagRemove() {
+        new Promise((resolve, reject) => {
+            conn.execute(
+                "DELETE FROM `Tags` WHERE `Tags`.`id` = ?",
+                [
+                    req.body.id
+                ],
+                function (err, results, fields) {
+                    if (err) {
+                        reject(err)
+                    }
+                    resolve(results)
+                }
+            )
+        });
+        return null;
+    }
+
+    function tagKoppelRemove() {
+        new Promise((resolve, reject) => {
+            conn.execute(
+                "DELETE FROM `koppel-project-tags` WHERE `koppel-project-tags`.`TagsID` = ?",
+                [
+                    req.body.id
+                ],
+                function (err, results, fields) {
+                    if (err) {
+                        reject(err)
+                    }
+                    resolve(results)
+                }
+            )
+        });
+        return null;
+    }
+
+    await tagRemove();
+    await tagKoppelRemove();
 
     res.send({
         "status": "succes"
