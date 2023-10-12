@@ -70,6 +70,7 @@
         tagAdderMode = false;
         newWerk = werk;
         editingID = project.id;
+        activeTags = [];
 
 
         // timeout van 0ms zodat de form al gerenderd is
@@ -134,7 +135,7 @@
         }
 
         // set werk tag to 0 or 1
-        formValues.werk = newWerk ? 1 : 0;
+        formValues.werk = parseInt(formValues.werk);
 
 
         // add tags to formValues
@@ -157,6 +158,16 @@
                 alert('project not ' + (editorMode ? 'edited' : 'added') + ' successfully')
                 err.data;
             });
+
+        activeTags = [];
+        addMode = false
+        tagAdderMode = false;
+
+        editorMode = false;
+        tagEditorMode = false;
+        editingID = null;
+
+        newWerk = false;
     }
 
     async function addTags() {
