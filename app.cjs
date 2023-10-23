@@ -45,10 +45,10 @@ app.post('/getProjects', async (req, res) => {
             conn.execute(
                 "SELECT projects.id, projects.name as projName, projects.from, projects.to, korteBeschrijving, langeBeschrijving, img, alt, giturl, weburl, werk, JSON_ARRAYAGG(JSON_OBJECT('id', Tags.id, 'name', Tags.name, 'color', Tags.color)) AS tags " +
                 "FROM `projects`" +
-                "LEFT JOIN `koppel-project-tags` ON `projects`.`id` = `projectID` " +
-                "LEFT JOIN `Tags` ON `koppel-project-tags`.`TagsID` = `Tags`.`id` " +
+                "LEFT JOIN `koppel-project-tags` ON `projects`.`id` = `projectID`" +
+                "LEFT JOIN `Tags` ON `koppel-project-tags`.`TagsID` = `Tags`.`id`" +
                 "WHERE werk = ? " +
-                "GROUP BY projects.id",
+                "GROUP BY projects.id;",
                 [werk], // Pass the parameter as an array here
                 function (err, results, fields) {
                     if (err) {
@@ -70,14 +70,13 @@ app.post('/getProjects', async (req, res) => {
     })
 });
 
-
 // dashboard stuff
 app.post('/getTags', async (req, res) => {
     // moest promise gebruiken omdat anders de query niet klaar was voor de return
     function query() {
         return new Promise((resolve, reject) => {
             conn.execute(
-                "SELECT * FROM `Tags`",
+                "SELECT * FROM `Tags` ORDER BY `Tags`.`ordering`, `Tags`.`name` ",
                 function (err, results, fields) {
                     if (err) {
                         reject(err)
@@ -210,10 +209,11 @@ app.post('/addTag', async (req, res) => {
     function tagInsert(tagsRes) {
         new Promise((resolve, reject) => {
             conn.execute(
-                "INSERT INTO `Tags` (`name`, `color`) VALUES (?, ?)",
+                "INSERT INTO `Tags` (`name`, `color`, `ordering`) VALUES (?, ?, ?)",
                 [
                     req.body.name,
-                    req.body.color
+                    req.body.color,
+                    req.body.ordering
                 ],
                 function (err, results, fields) {
                     if (err) {

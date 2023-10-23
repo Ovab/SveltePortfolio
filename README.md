@@ -27,7 +27,7 @@ add the .env file to the root of the project.
 After installing docker and docker-compose simply run the following command in the root of the project:
 
 ```bash
-docker-compose up -d
+sudo docker-compose up -d
 ```
 
 Now you can access the app on port 80 of your server, api should be on port 8000.
@@ -44,3 +44,20 @@ You can preview the production build with `npm run preview`.
 
 To use this app on a regular non Docker server I'd reccomend using [pm2](https://pm2.keymetrics.io/) to run the app and its api.
 I did not make a pm2 config file for this app so you'll have to make one yourself.
+
+
+### Updating
+
+Simply git pull, kill all running containers with docker kill 
+```bash
+$(docker ps -q)
+```
+delete all images 
+```bash
+docker system prune -a
+``` 
+and run
+ ```bash
+sudo docker-compose up -d
+  ``` 
+again.
