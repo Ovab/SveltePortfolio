@@ -1,4 +1,4 @@
-#ABOUT
+# ABOUT
 
 For school project I made a portfolio website, I used Svelte, Tailwind, threeJS, SQL, Express and Docker
 
