@@ -67,12 +67,11 @@
          aria-roledescription="click to see less">
         <div
             class="bg-white h-fit w-[90vw] md:w-[80vw] rounded flex p-2 fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            transition:scale={{ duration: 300}}
             id="innerDiv">
             <div class="grid grid-cols-2 gap-2">
                 <div>
                     <img class="rounded object-scale-down group-hover:scale-110 transition-all bg-gray-500 mb-10"
-                         src="{img}" alt="yYEET">
+                         src="{img}" alt="{alt}">
 
                     <Tags tags="{tags}" allTags="{allTags}"/>
                 </div>
