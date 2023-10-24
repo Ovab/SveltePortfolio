@@ -1,3 +1,9 @@
+#ABOUT
+
+For school project I made a portfolio website, I used Svelte, Tailwind, threeJS, SQL, Express and Docker
+
+
+
 ## Developing
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server for Svelte:
