@@ -36,6 +36,18 @@ conn.connect(function (err) {
     if (err) throw err;
 });
 
+app.post('/checkPassword', (req, res) => {
+    console.log(req.body, process.env.ADMIN_PASSWORD)
+    if (req.body.password === process.env.ADMIN_PASSWORD) {
+        res.send({
+            "status": "succes"
+        })
+    } else {
+        res.send({
+            "status": "fail"
+        })
+    }
+});
 
 // get all projects
 app.post('/getProjects', async (req, res) => {

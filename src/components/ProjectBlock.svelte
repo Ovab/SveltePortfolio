@@ -11,6 +11,8 @@
     export let langeBeschrijving = "";
     export let tags = "";
 
+    export let allTags = [];
+
     export let img = "";
 
     export let alt = "NO ALT PROVIDED";
@@ -51,7 +53,7 @@
                     <p class="text-white ml-2 font-semibold">{name}</p>
                     <p class="text-white ml-2">{korteBeschrijving}</p>
                 </div>
-                <Tags tags="{tags}"/>
+                <Tags tags="{tags}" allTags="{allTags}"/>
 
             </div>
         </div>
@@ -72,7 +74,7 @@
                     <img class="rounded object-scale-down group-hover:scale-110 transition-all bg-gray-500 mb-10"
                          src="{img}" alt="yYEET">
 
-                    <Tags tags="{tags}"/>
+                    <Tags tags="{tags}" allTags="{allTags}"/>
                 </div>
                 <div class="flex flex-col border-l pl-2">
                     <div class="prose-a:text-blue-500">{@html langeBeschrijving}</div>
