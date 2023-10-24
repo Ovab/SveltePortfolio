@@ -37,7 +37,6 @@ conn.connect(function (err) {
 });
 
 app.post('/checkPassword', (req, res) => {
-    console.log(req.body, process.env.ADMIN_PASSWORD)
     if (req.body.password === process.env.ADMIN_PASSWORD) {
         res.send({
             "status": "succes"

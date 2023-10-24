@@ -56,7 +56,7 @@ I did not make a pm2 config file for this app so you'll have to make one yoursel
 
 Simply git pull, kill all running containers with docker kill 
 ```bash
-$(docker ps -q)
+docker kill $(docker ps -q)
 ```
 delete all images 
 ```bash
