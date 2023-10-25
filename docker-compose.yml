@@ -1,19 +1,16 @@
 version: "3"
 services:
     db:
-        # MySQL Image used for the database
         image: mysql
         ports:
             - "${MYSQL_PORT}:3306"
         volumes:
             - ./database:/var/lib/mysql
+
     phpmyadmin:
-        # PHP my admin to manage the database
         image: phpmyadmin
-        # Port 8080 is mapped to be used on the outside as to not conflict with the apache build
         ports:
             - "8080:80"
-        # Depends on db to start first
         depends_on:
             - db
         environment:
@@ -26,18 +23,15 @@ services:
             dockerfile: Dockerfile
         user: "node"
         environment:
-            # Internal server error messages will not send stacktrace to the browser in production
             - NODE_ENV=production
-            # Sets the timezone of the containers OS
             - TZ=Europe/Amsterdam
-        # Points to a file with the sensitive environment variables
         env_file:
             - .env
         restart: unless-stopped
-        # Output to port 80, Node is running on port 3000 as it does by default
         ports:
             - "3000:3000"
         command: ["node", "build/index.js"]
+
     portfolio-api:
         container_name: portfolio-api
         build:
@@ -45,31 +39,23 @@ services:
             dockerfile: Dockerfile
         user: "node"
         environment:
-            # Internal server error messages will not send stacktrace to the browser in production
             - NODE_ENV=production
             - PORT=3001
-            # Sets the timezone of the containers OS
             - TZ=Europe/Amsterdam
-        # Points to a file with the sensitive environment variables
         env_file:
             - .env
         restart: unless-stopped
-        # Output to port 8000, Node is running on port 3000 as it does by default
         ports:
             - "3001:3001"
         command: "node app.cjs"
 
     nginx:
         image: nginx
-        ports:
-            - "80:8080"  # Map port 8080 on your host to port 8080 in the Nginx container
         volumes:
-            - ./nginx.conf:/etc/nginx/conf.d/default.conf
+            - ./nginx.conf:/etc/nginx/nginx.conf
+        ports:
+            - "80:80"
         depends_on:
-            - portfolio-api
             - phpmyadmin
+            - portfolio-api
             - portfolio-site
-        networks:
-            default:
-                aliases:
-                    - nginx.dev
