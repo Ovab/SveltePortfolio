@@ -9,7 +9,7 @@ services:
     phpmyadmin:
         image: phpmyadmin
         ports:
-            - "8080:80"
+            - "8081:80"
         depends_on:
             - db
         environment:
@@ -45,5 +45,5 @@ services:
             - .env
         restart: unless-stopped
         ports:
-            - "3001:3001"
+            - "8080:3001"
         command: "node app.cjs"
