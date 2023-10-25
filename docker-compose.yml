@@ -15,17 +15,6 @@ services:
     phpmyadmin:
         # PHP my admin to manage the database
         image: phpmyadmin
-            
-            
-            
-            
-            
-            
-            
-            Expand Down
-
-
-
         # Port 8080 is mapped to be used on the outside as to not conflict with the apache build
         ports:
             - 8080:80
