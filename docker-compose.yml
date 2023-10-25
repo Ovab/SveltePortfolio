@@ -1,26 +1,37 @@
 version: "3"
-
 services:
-    mariadb:
-        image: mariadb:10.4
-        restart: always
+    db:
+        # MySQL Image used for the database
+        image: mysql
+        ports:
+            - "3306:3306"
         volumes:
-            - mariadb-data:/var/lib/mysql
+            - ./database:/var/lib/mysql
         environment:
-            MYSQL_ROOT_PASSWORD: qwerty
-
+            MYSQL_USER: "rootUser"
+            MYSQL_PASSWORD: "yeet"
+            MYSQL_ROOT_PASSWORD: "root"
+            MYSQL_DATABASE: "root"
     phpmyadmin:
         # PHP my admin to manage the database
         image: phpmyadmin
+            
+            
+            
+            
+            
+            
+            
+            Expand Down
+
+
+
         # Port 8080 is mapped to be used on the outside as to not conflict with the apache build
         ports:
             - 8080:80
         # Depends on db to start first
         depends_on:
             - db
-        environment:
-            - PMA_ARBITRARY = 1
-            - PMA_HOST = db
     portfolio-site:
         container_name: portfolio-site
         build:
@@ -65,6 +76,3 @@ services:
             default:
                 aliases:
                     - api.dev
-
-volumes:
-    mariadb-data:
