@@ -37,6 +37,39 @@ conn.connect(function (err) {
     if (err) throw err;
 });
 
+// get all projects with get
+app.get('/getProjects', async (req, res) => {
+    // moest promise gebruiken omdat anders de query niet klaar was voor de return
+    function query(werk = 0) {
+        return new Promise((resolve, reject) => {
+            conn.execute(
+                "SELECT projects.id, projects.name as projName, projects.from, projects.to, korteBeschrijving, langeBeschrijving, img, alt, giturl, weburl, werk, JSON_ARRAYAGG(JSON_OBJECT('id', Tags.id, 'name', Tags.name, 'color', Tags.color)) AS tags " +
+                "FROM `projects`" +
+                "LEFT JOIN `koppel-project-tags` ON `projects`.`id` = `projectID`" +
+                "LEFT JOIN `Tags` ON `koppel-project-tags`.`TagsID` = `Tags`.`id`" +
+                "WHERE werk = ? " +
+                "GROUP BY projects.id;",
+                [werk], // Pass the parameter as an array here
+                function (err, results, fields) {
+                    if (err) {
+                        reject(err)
+                    }
+                    resolve(results)
+                    return results
+                }
+            )
+        });
+    }
+
+    const werkRes = await query(1);
+    const projectsRes = await query(0);
+
+    res.send({
+        werk: werkRes,
+        projects: projectsRes
+    })
+});
+
 app.post('/checkPassword', (req, res) => {
     if (req.body.password === process.env.ADMIN_PASSWORD) {
         res.send({
