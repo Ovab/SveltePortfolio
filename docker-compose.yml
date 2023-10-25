@@ -8,17 +8,17 @@ services:
         volumes:
             - ./database:/var/lib/mysql
 
-    phpmyadmin:
-        # PHPMyAdmin to manage the database
-        image: phpmyadmin
-        # Port 8080 is mapped to be used on the outside
-        ports:
-            - "8081:80"
-        # Depends on db to start first
-        depends_on:
-            - db
-        environment:
-            PMA_HOST: db
+phpmyadmin:
+    image: phpmyadmin
+    ports:
+        - "8080:80" # Expose PHPMyAdmin on port 8080
+    depends_on:
+        - db
+    environment:
+        PMA_HOST: db
+    networks:
+        - dev_network
+    hostname: phpmyadmin.dev
 
     portfolio-site:
         # Your portfolio site container configuration
