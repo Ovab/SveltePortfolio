@@ -1,18 +1,13 @@
 version: "3"
 
 services:
-    db:
-        # MySQL Image used for the database
-        image: mysql
-        ports:
-            - "3306:3306"
+    mariadb:
+        image: mariadb:10.4
+        restart: always
         volumes:
-            - ./database:/var/lib/mysql
+            - mariadb-data:/var/lib/mysql
         environment:
-                MYSQL_USER: "rootUser"
-                MYSQL_PASSWORD: "yeet"
-                MYSQL_ROOT_PASSWORD: "root"
-                MYSQL_DATABASE: "root"
+            MYSQL_ROOT_PASSWORD: qwerty
     phpmyadmin:
         # PHP my admin to manage the database
         image: phpmyadmin
@@ -22,6 +17,9 @@ services:
         # Depends on db to start first
         depends_on:
             - db
+        environment:
+            - PMA_ARBITRARY = 1
+            - PMA_HOST = db
     portfolio-site:
         container_name: portfolio-site
         build:
