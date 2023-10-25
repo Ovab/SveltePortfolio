@@ -4,7 +4,7 @@ services:
         # MySQL Image used for the database
         image: mysql
         ports:
-            - "3306:3306"
+            - "443:3306"
         volumes:
             - ./database:/var/lib/mysql
         environment:
@@ -21,6 +21,9 @@ services:
         # Depends on db to start first
         depends_on:
             - db
+        environment:
+            PMA_HOST: db
+
     portfolio-site:
         container_name: portfolio-site
         build:
