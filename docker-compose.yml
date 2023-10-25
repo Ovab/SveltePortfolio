@@ -42,7 +42,6 @@ services:
         # Output to port 80, Node is running on port 3000 as it does by default
         ports:
             - "80:3000"
-            - "443:3000"
         command: ["node", "build/index.js"]
     portfolio-api:
         container_name: portfolio-api
