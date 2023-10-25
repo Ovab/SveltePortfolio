@@ -12,7 +12,7 @@ services:
         image: phpmyadmin
         # Port 8080 is mapped to be used on the outside as to not conflict with the apache build
         ports:
-            - "81:80"
+            - "8080:80"
         # Depends on db to start first
         depends_on:
             - db
@@ -36,7 +36,7 @@ services:
         restart: unless-stopped
         # Output to port 80, Node is running on port 3000 as it does by default
         ports:
-            - "80:3000"
+            - "3000:3000"
         command: ["node", "build/index.js"]
     portfolio-api:
         container_name: portfolio-api
@@ -58,19 +58,17 @@ services:
         ports:
             - "3001:3001"
         command: "node app.cjs"
-        networks:
-            default:
-                aliases:
-                    - api.dev
+
     nginx:
         image: nginx
         ports:
-            - "8080:8080"  # Map port 8080 on your host to port 80 in the Nginx container
+            - "80:8080"  # Map port 8080 on your host to port 8080 in the Nginx container
         volumes:
             - ./nginx.conf:/etc/nginx/conf.d/default.conf
         depends_on:
             - portfolio-api
             - phpmyadmin
+            - portfolio-site
         networks:
             default:
                 aliases:
