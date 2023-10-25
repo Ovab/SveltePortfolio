@@ -4,20 +4,15 @@ services:
         # MySQL Image used for the database
         image: mysql
         ports:
-            - "443:3306"
+            - "${MYSQL_PORT}:3306"
         volumes:
             - ./database:/var/lib/mysql
-        environment:
-            MYSQL_USER: "rootUser"
-            MYSQL_PASSWORD: "yeet"
-            MYSQL_ROOT_PASSWORD: "root"
-            MYSQL_DATABASE: "root"
     phpmyadmin:
         # PHP my admin to manage the database
         image: phpmyadmin
         # Port 8080 is mapped to be used on the outside as to not conflict with the apache build
         ports:
-            - 8080:80
+            - "8080:80"
         # Depends on db to start first
         depends_on:
             - db
