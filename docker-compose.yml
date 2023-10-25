@@ -13,7 +13,7 @@ services:
         image: phpmyadmin
         # Port 8080 is mapped to be used on the outside
         ports:
-            - "8080:80"
+            - "8081:80"
         # Depends on db to start first
         depends_on:
             - db
