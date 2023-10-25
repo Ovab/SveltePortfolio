@@ -8,17 +8,17 @@ services:
         volumes:
             - ./database:/var/lib/mysql
 
-phpmyadmin:
-    image: phpmyadmin
-    ports:
-        - "8080:80" # Expose PHPMyAdmin on port 8080
-    depends_on:
-        - db
-    environment:
-        PMA_HOST: db
-    networks:
-        - dev_network
-    hostname: phpmyadmin.dev
+    phpmyadmin:
+        image: phpmyadmin
+        ports:
+            - "8080:80" # Expose PHPMyAdmin on port 8080
+        depends_on:
+            - db
+        environment:
+            PMA_HOST: db
+        networks:
+            - dev_network
+        hostname: phpmyadmin.dev
 
     portfolio-site:
         # Your portfolio site container configuration
