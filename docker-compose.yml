@@ -6,9 +6,6 @@ services:
             - "${MYSQL_PORT}:3306"
         volumes:
             - ./database:/var/lib/mysql
-        networks:
-            - mynetwork
-
     phpmyadmin:
         image: phpmyadmin
         ports:
@@ -17,8 +14,6 @@ services:
             - db
         environment:
             PMA_HOST: db
-        networks:
-            - mynetwork
 
     portfolio-site:
         container_name: portfolio-site
@@ -35,8 +30,6 @@ services:
         ports:
             - "80:3000"
         command: ["node", "build/index.js"]
-        networks:
-            - mynetwork
 
     portfolio-api:
         container_name: portfolio-api
@@ -54,17 +47,3 @@ services:
         ports:
             - "3001:3001"
         command: "node app.cjs"
-        networks:
-            - mynetwork
-
-    nginx:
-        image: nginx
-        ports:
-            - "8080:8080"
-        volumes:
-            - ./nginx.conf:/etc/nginx/conf.d/default.conf
-        depends_on:
-            - portfolio-api
-            - phpmyadmin
-        networks:
-            - mynetwork
