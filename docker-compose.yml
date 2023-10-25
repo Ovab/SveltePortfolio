@@ -5,7 +5,7 @@ services:
         # MySQL Image used for the database
         image: mysql
         ports:
-            - 3306:3306
+            - "3306:3306"
         volumes:
             - ./database:/var/lib/mysql
         env_file:
@@ -59,3 +59,7 @@ services:
         ports:
             - "8000:3001"
         command: "node app.cjs"
+        networks:
+            default:
+                aliases:
+                    - api.dev
