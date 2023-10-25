@@ -8,6 +8,7 @@ services:
             - mariadb-data:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: qwerty
+
     phpmyadmin:
         # PHP my admin to manage the database
         image: phpmyadmin
@@ -64,3 +65,6 @@ services:
             default:
                 aliases:
                     - api.dev
+
+volumes:
+    mariadb-data:
