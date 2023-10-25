@@ -1,6 +1,7 @@
 version: "3"
 services:
     db:
+        # MySQL Image used for the database
         image: mysql
         ports:
             - "${MYSQL_PORT}:3306"
@@ -8,15 +9,19 @@ services:
             - ./database:/var/lib/mysql
 
     phpmyadmin:
+        # PHPMyAdmin to manage the database
         image: phpmyadmin
+        # Port 8080 is mapped to be used on the outside
         ports:
             - "8080:80"
+        # Depends on db to start first
         depends_on:
             - db
         environment:
             PMA_HOST: db
 
     portfolio-site:
+        # Your portfolio site container configuration
         container_name: portfolio-site
         build:
             context: .
@@ -29,10 +34,11 @@ services:
             - .env
         restart: unless-stopped
         ports:
-            - "3000:3000"
+            - "80:3000"
         command: ["node", "build/index.js"]
 
     portfolio-api:
+        # Your API container configuration
         container_name: portfolio-api
         build:
             context: .
@@ -48,14 +54,21 @@ services:
         ports:
             - "3001:3001"
         command: "node app.cjs"
+        networks:
+            default:
+                aliases:
+                    - api.dev
 
     nginx:
         image: nginx
-        volumes:
-            - ./nginx.conf:/etc/nginx/nginx.conf
         ports:
-            - "80:80"
+            - "8080:8080"
+        volumes:
+            - ./nginx.conf:/etc/nginx/conf.d/default.conf
         depends_on:
-            - phpmyadmin
             - portfolio-api
-            - portfolio-site
+            - phpmyadmin
+        networks:
+            default:
+                aliases:
+                    - nginx.dev
