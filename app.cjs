@@ -50,7 +50,7 @@ app.post('/checkPassword', (req, res) => {
 });
 
 // get all projects
-app.post('/getProjects', async (req, res) => {
+app.get('/getProjects', async (req, res) => {
     // moest promise gebruiken omdat anders de query niet klaar was voor de return
     function query(werk = 0) {
         return new Promise((resolve, reject) => {
@@ -83,7 +83,7 @@ app.post('/getProjects', async (req, res) => {
 });
 
 // dashboard stuff
-app.post('/getTags', async (req, res) => {
+app.get('/getTags', async (req, res) => {
     // moest promise gebruiken omdat anders de query niet klaar was voor de return
     function query() {
         return new Promise((resolve, reject) => {

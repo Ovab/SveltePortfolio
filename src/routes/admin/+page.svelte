@@ -98,7 +98,7 @@
 
     async function getTags() {
         await ofetch(PUBLIC_API_URL + `getTags`, {
-            method: 'POST',
+            method: 'GET',
         }).then((res) => {
             availableTags = res.tags;
             return res;
@@ -110,7 +110,7 @@
 
     async function getProjects() {
         await ofetch(PUBLIC_API_URL + `getProjects`, {
-            method: 'POST',
+            method: 'GET',
         }).then((res) => {
             projRes = res.projects;
             werkRes = res.werk;

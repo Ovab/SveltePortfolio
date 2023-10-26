@@ -44,11 +44,11 @@
     const fetchAll = (async () => {
         const responseProj = await fetch(PUBLIC_API_URL+'getProjects',
             {
-                method: 'post',
+                method: 'GET',
             })
         const responseTags = await fetch(PUBLIC_API_URL+'getTags',
             {
-                method: 'post',
+                method: 'GET',
             })
 
         const projects = await responseProj.json()
