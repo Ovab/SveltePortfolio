@@ -15,6 +15,8 @@
 
     let newWerk = false;
 
+    let checkBoxValue = newWerk;
+
 
     function checkIfActive(name) {
         let toCheck = newWerk ? werkRes : projRes;
@@ -46,6 +48,7 @@
     function startAdd(werk, tagEdit = false) {
         addMode = true;
         newWerk = werk;
+        checkBoxValue = werk;
         tagAdderMode = tagEdit;
 
         editorMode = false;
@@ -66,6 +69,7 @@
         editorMode = true;
         tagAdderMode = tagEdit;
         newWerk = werk;
+        checkBoxValue = werk;
         editingID = project.id;
         activeTags = [];
 
@@ -131,7 +135,7 @@
         }
 
         // set werk tag to 0 or 1
-        formValues.werk = parseInt(formValues.werk);
+        formValues.werk = checkBoxValue ? 1 : 0;
 
 
         // add tags to formValues
@@ -267,7 +271,7 @@
                     }}>+
                     </button>
                 </div>
-                <div class="flex flex-col ml-2">
+                <div class="flex flex-col gap-2 ml-2">
                     {#each projRes as project}
                         <span class="flex justify-between bg-purple-500 rounded p-1 w-[60%]">
                                 <button on:click={()=>{
@@ -363,14 +367,20 @@
                                                             class="rounded ml-2 w-fit">
                 <div class="flex">
                     {#if newWerk}
-                        <span class="text-xs w-fit">Werk</span><input type="checkbox" name="werk"
-                                                                      class="w-fit ml-2 mt-px" checked/>
+                        <span class="text-xs w-fit">Werk</span>
+                        <input type="checkbox"
+                               name="werk"
+                               class="w-fit ml-2 mt-px"
+                               bind:checked = {checkBoxValue}
+                        />
 
                     {:else}
                         <span class="text-xs w-fit">Werk</span>
                         <input type="checkbox"
                                name="werk"
-                               class="w-fit ml-2 mt-px"/>
+                               class="w-fit ml-2 mt-px"
+                               bind:checked = {checkBoxValue}
+                        />
                     {/if}
                 </div>
 

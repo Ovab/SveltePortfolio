@@ -77,14 +77,19 @@
                 </div>
                 <div class="flex flex-col border-l pl-2">
                     <div class="prose-a:text-blue-500">{@html langeBeschrijving}</div>
-                    {#if from && to}
+                    {#if from}
                         <span>
-                        Ik heb hier gewerkt tussen <span class="font-semibold">
-                        {from.split("-").reverse().join("-")}
-                    </span> en
-                        <span class="font-semibold">
-                            {to.split("-").reverse().join("-")}
-                        </span>.</span>
+                            Ik heb hier gewerkt {to ? 'tussen' : 'sinds'}
+                            <span class="font-semibold">
+                                {from.split('T')[0].split('-').reverse().join('-')}
+                            </span>
+                            {#if to}
+                                en
+                                <span class="font-semibold">
+                                    {to.split('T')[0].split('-').reverse().join('-')}
+                                </span>.
+                            {/if}
+                        </span>
                     {/if}
 
                     <span class="mt-auto flex gap-2">
