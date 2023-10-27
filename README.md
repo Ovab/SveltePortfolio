@@ -58,7 +58,9 @@ Simply git pull, kill all running containers with docker kill
 ```bash
 docker kill $(docker ps -q)
 ```
-delete all images 
+you can also kill them one by one with `docker kill <container id>`
+then
+delete all non-running images with: 
 ```bash
 docker system prune -a
 ``` 
@@ -66,4 +68,4 @@ and run
  ```bash
 sudo docker-compose up -d
   ``` 
-again.
+again or `sudo docker-compose up -d <composer build name>` for just 1 image.
