@@ -116,7 +116,9 @@
                         max-w-[74%] max-h-[50vh] md:max-h-[45vh]
                         mt-[32%] md:mt-[25%] xl:mt-[15%] 2xl:mt-[20vh]
                         overflow-y-auto overflow-x-clip">
-                <h2 class="text-2xl text-center">Werk</h2>
+                {#if animationDone}
+                    <h2 class="text-2xl text-center">Werk</h2>
+                {/if}
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 grid-rows-1 mt-3 mx-2 gap-2">
                     {#each Object.values(data.getProjects.werk) as project, counter}
                         <div class="h-[250px] md:h-[10vh] xl:h-[30vh]">
@@ -138,7 +140,9 @@
                         </div>
                     {/each}
                 </div>
-                <h2 class="text-2xl text-center">Projecten</h2>
+                {#if animationDone}
+                    <h2 class="text-2xl text-center">Projecten</h2>
+                {/if}
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 grid-rows-1 mt-3 mx-4 gap-2">
                     {#each Object.values(data.getProjects.projects) as project, counter}
                         <div class="h-[250px] md:h-[10vh] xl:h-[30vh]">
