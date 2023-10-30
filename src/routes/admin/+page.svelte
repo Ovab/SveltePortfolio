@@ -369,22 +369,12 @@
                                                             name="weburl"
                                                             class="rounded ml-2 w-fit">
                 <div class="flex">
-                    {#if newWerk}
                         <span class="text-xs w-fit">Werk</span>
                         <input type="checkbox"
                                name="werk"
                                class="w-fit ml-2 mt-px"
                                bind:checked = {checkBoxValue}
                         />
-
-                    {:else}
-                        <span class="text-xs w-fit">Werk</span>
-                        <input type="checkbox"
-                               name="werk"
-                               class="w-fit ml-2 mt-px"
-                               bind:checked = {checkBoxValue}
-                        />
-                    {/if}
                 </div>
 
                 <span class="text-xs w-fit">Tags</span>
