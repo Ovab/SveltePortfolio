@@ -20,12 +20,11 @@
         }).catch((err) => {
             err.data; alert('Er is iets misgegaan, stuur aub handmatig een email met de gegevens hier naast')
         }).then((res) => {
+            if(res==='succes') {
+                alert('Het bericht is verstuurd')
+            }
             return res.data
         })
-
-        if(res==='success') {
-            alert('Het bericht is verstuurd')
-        }
     }
 </script>
 

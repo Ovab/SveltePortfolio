@@ -223,25 +223,26 @@
 </script>
 
 
-<div class="bg-blue-300 w-screen text-center p-[1vh]">
-    DASHBOARD
+<div class="bg-blue-300 max-w-screen flex justify-center p-[0.8vh] h-[4vh]">
+    SUPER EPIK GAMER DASHBOARD
 </div>
 
-<div class="flex flex-row w-screen h-full">
+<div class="flex flex-row max-w-screen h-full">
     <!--Sidebar-->
-    <div class="bg-green-300 w-[15%] flex flex-col gap-8 pl-2">
+    <div class="bg-gray-300 w-[15%] min-h-[96vh] overflow-y-auto flex flex-col gap-8 pl-2">
         {#if projRes != null}
             <div>
                 <div class="flex justify-between mr-5">
                     Werk
-                    <button on:click={()=>{
+                    <button class="hover:text-green-600 hover:font-semibold hover:scale-150 transition-all"
+                            on:click={()=>{
                         startAdd(1);
                     }}>+
                     </button>
                 </div>
                 <div class="flex flex-col gap-2 ml-2">
                     {#each werkRes as werk}
-                        <span class="flex justify-between bg-purple-500 rounded p-1 w-[60%]">
+                            <span class="flex justify-between bg-gray-800 text-white rounded p-1 w-[60%]">
                             <button on:click={
                                 ()=>{
                                     if(!editorMode) startEdit(werk, true);
@@ -253,7 +254,7 @@
                                 {werk.projName}
                             </button>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="cursor-pointer" viewBox="0 0 16 16"
+                                 class="cursor-pointer hover:fill-red-500 hover:scale-[1.3] transition-all" viewBox="0 0 16 16"
                                  on:click={()=>deleteThing(werk.id, true)}>
                                 <path
                                     d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
@@ -266,7 +267,8 @@
             <div>
                 <div class="flex justify-between mr-5">
                     Projecten
-                    <button on:click={()=>{
+                    <button class="hover:text-green-600 hover:font-semibold hover:scale-150 transition-all"
+                            on:click={()=>{
                         startAdd(0);
                     }}>+
                     </button>
@@ -281,7 +283,7 @@
                                 {project.projName}
                             </button>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="cursor-pointer" viewBox="0 0 16 16"
+                                 class="cursor-pointer hover:fill-red-500 hover:scale-[1.3] transition-all" viewBox="0 0 16 16"
                                  on:click={()=>deleteThing(project.id, true)}>
                                 <path
                                     d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
@@ -296,7 +298,8 @@
             <div>
                 <div class="flex justify-between mr-5">
                     Tags
-                    <button on:click={()=>{startAdd(false, true)}}>+</button>
+                    <button class="hover:text-green-600 hover:font-semibold hover:scale-150 transition-all"
+                        on:click={()=>{startAdd(false, true)}}>+</button>
                 </div>
                 <div class="flex flex-col ml-2 gap-1 pb-2">
                     {#each availableTags as tag}
@@ -312,7 +315,7 @@
                               class="bg-pink-300 p-1 rounded w-[60%] flex justify-between">
                             {tag.name}
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                 class="cursor-pointer" viewBox="0 0 16 16" on:click={()=>deleteThing(tag.id, false)}>
+                                 class="cursor-pointer hover:scale-[1.3] transition-all" viewBox="0 0 16 16" on:click={()=>deleteThing(tag.id, false)}>
                                   <path
                                       d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
                             </svg>
@@ -324,7 +327,7 @@
     </div>
 
     <!--Editor-->
-    <div class="w-full py-2 bg-gray-300 border-l-2 border-black">
+    <div class="w-full h-fit min-h-[96vh] pl-2 py-2 bg-gray-100 border-l-2 overflow-y-auto border-black">
         {#if (addMode || editorMode) && !tagAdderMode}
             {editorMode ? 'EDIT' : 'NIEUW'} {newWerk ? 'WERK' : 'PROJECT'} ITEM:
             <form class="flex flex-col mt-5 ml-2 gap-2 w-fit" on:submit={addProject}>
@@ -429,3 +432,9 @@
         {/if}
     </div>
 </div>
+
+<style>
+    input, textarea {
+        @apply border border-gray-500;
+    }
+</style>
